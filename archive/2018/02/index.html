@@ -11,7 +11,7 @@
 
     <title>
         
-        Android知识--View事件传递 - 江南E客的Blog | Z.Alex&#39;s Blog
+        江南E客的Blog | Z.Alex&#39;s Blog
         
     </title>
 
@@ -65,7 +65,7 @@
                     <span>标签</span>
                 </a>
             </li>
-            <li>
+            <li class="active">
                 <a href="/archive">
                     <i class="iconfont icon-guidang2"></i>
                     <span>存档</span>
@@ -87,10 +87,6 @@
             
         </ul>
     </div>
-    
-        <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、View事件基础知识"><span class="toc-text">1、View事件基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、事件模型"><span class="toc-text">2、事件模型</span></a></li></ol>
-</div>
     
 </div>
 
@@ -117,61 +113,80 @@
         
 
 
-<div class="post-container">
-    <div class="post-title">
-        Android知识--View事件传递
-    </div>
+<!-- 归档列表 -->
 
-    <div class="post-meta">
-        <span class="attr">发布于：<span>2019-01-29 16:35:09</span></span>
-        
-        <span class="attr">标签：/
-        
-        <a class="tag" href="/tags/#Android" title="Android">Android</a>
-        <span>/</span>
-        
-        
-        </span>
-        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
-</span>
+<div class="archives-container">
 
-    </div>
-    <div class="post-content ">
-        <h3 id="1、View事件基础知识"><a href="#1、View事件基础知识" class="headerlink" title="1、View事件基础知识"></a>1、View事件基础知识</h3><p>　　(1) 所有 Touch 事件都被封装成了 MotionEvent 对象，包括 Touch 的位置、时间、历史记录以及第几个手指(多指触摸)等；</p>
-<p>　　(2) 事件类型分为 ACTION_DOWN, ACTION_UP, ACTION_MOVE, ACTION_POINTER_DOWN, ACTION_POINTER_UP, ACTION_CANCEL，每个事件都是以 ACTION_DOWN 开始 ACTION_UP 结束；</p>
-<p>　　(3) 对事件的处理包括三类，分别为传递——dispatchTouchEvent()函数、拦截——onInterceptTouchEvent()函数、消费——onTouchEvent()函数和 OnTouchListener；</p>
-<p>　　(4)、事件一定是先到达父控件上；</p>
-<p>　　(5)、父控件和父类不是一回事，这两个概念初学者很容易混淆。</p>
-<h3 id="2、事件模型"><a href="#2、事件模型" class="headerlink" title="2、事件模型"></a>2、事件模型</h3><p>​    所谓的事件模型就是：控件→子控件</p>
-<p>​    事件模型主要涉及到3个概念：事件的分发、事件的拦截、事件的响应。</p>
-<p>​    (1)、事件分发主要分为以下三种情况：</p>
-<p>​        A、首先会先调用自身的onInterceptTouchEvent方法，调用此方法的目的是为了，先让自己这个控件判断下是否需要把此事件拦截下来，如果拦截下来，那么就代表自己这个控件需要处理这个事件，所以此时会调用自身onTouchEvent来对这个事件进行响应。</p>
-<p>​        B、如果不拦截下来，那么才会有后续的事件向下传递的流程。将这个事件传递给子控件。现在子控件接收到了这个事件，上文提过，一个事件到达一个View或者ViewGroup，就会最先调用这个控件的dispatchTouchEvent，所以此时，事件到达子控件的dispatchTouchEvent方法，如果这个控件仍然是一个ViewGroup的类型，那么事件继续分发的逻辑依然遵循A流程的逻辑。</p>
-<p>​        C、如果这个子控件只是一个View，而不是ViewGroup，那么此时，事件分发的逻辑略有不同。由于View没有onInterceptTouchEvent的方法，所以当一个事件到达这个View的dispatchTouchEvent的时候，dispatchTouchEvent就调用不到onInterceptTouchEvent，它会直接调用onTouchEvent的方法，直接让这个View来响应此事件。</p>
-<p>​    (2)、事件响应</p>
-<p><img src="//alex0605.github.io/2019/01/29/Android知识-View事件传递/event_respose.jpg" alt="event_respose"></p>
-<p>​        如上图所示，如果ViewGroupB拦截了事件，那么此时事件就会由ViewGroupB来响应，调用ViewGroupB中的onTouchEvent，此时ViewGroupB中的onTouchEvent的返回值有两种可能，一种是true，一种是false，如果返回true，则代表ViewGroupB消费了此事件，事件此时终止。如果返回的值是false，那么此时这个事件会回传给父控件，调用到父控件的onTouchEvent方法，由父控件来进行响应，那父控件的onTouchEvent也是同样的逻辑。要么消费事件，要么回传给父控件的父控件。<br>　　此时，就可以得出我们通常所说的两个方向：<br>　　１．事件传递的方向：父控件→子控件<br>　　２．事件响应的方向：子控件→父控件    </p>
-
+<div class="one-tag-list">
+                <span class="fa fa-calendar-times-o listing-seperator" id="2018">
+                    <span class="tag-text">2018</span>
+                </span>
+    <ul>
         
-            <div class="donate-container">
-    <div class="donate-button">
-        <button id="donate-button">赞赏</button>
-    </div>
-    <div class="donate-img-container hide" id="donate-img-container">
-        <img id="donate-img" src="" data-src="/img/donate.png">
-        <p> 感谢鼓励 </p>
-    </div>
+        <!-- <li class="listing-item">
+        <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+        <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+        </li> -->
+        <li>
+            <span>02-24</span>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2018/02/24/Android知识-View事件传递/">
+                        <span>
+                            Android知识--View事件传递
+                        </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+        </li>
+        
+        <!-- <li class="listing-item">
+        <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+        <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+        </li> -->
+        <li>
+            <span>01-29</span>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2018/01/29/Git命令速查手册/">
+                        <span>
+                            Git命令速查手册
+                        </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+        </li>
+        
+        <!-- <li class="listing-item">
+        <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+        <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+        </li> -->
+        <li>
+            <span>01-25</span>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2018/01/25/机器学习入门（一）/">
+                        <span>
+                            机器学习入门（一）
+                        </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+        </li>
+        
+        <!-- <li class="listing-item">
+        <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+        <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+        </li> -->
+        <li>
+            <span>01-18</span>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2018/01/18/Android-Studio-Gradle详解/">
+                        <span>
+                            Android Studio Gradle详解
+                        </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+        </li>
+        
+
+    </ul>
 </div>
-        
-        <br>
-        <div id="comment-container" style="display:none;">
-        </div>
-        <div id="disqus_thread" style="display:none;"></div>
 
-        <div id="lv-container" style="display:none;">
-        </div>
-
-    </div>
 </div>
     </div>
 </div>
@@ -259,7 +274,7 @@
     // We expose some of the variables needed by the front end
     window.hexo_search_path = "search.json"
     window.hexo_root = "/"
-    window.isPost = true
+    window.isPost = false
 </script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>
