@@ -11,7 +11,7 @@
 
     <title>
         
-        Android知识--View事件传递 - 江南E客的Blog | Z.Alex&#39;s Blog
+        Android知识(一)--View事件传递 - 江南E客的Blog | Z.Alex&#39;s Blog
         
     </title>
 
@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、View事件基础知识"><span class="toc-text">1、View事件基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、事件模型"><span class="toc-text">2、事件模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-1、事件分发主要分为以下三种情况"><span class="toc-text">​    2.1、事件分发主要分为以下三种情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-2、事件响应"><span class="toc-text">​    2.2、事件响应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-3-、事件拦截"><span class="toc-text">​    2.3 、事件拦截</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-、事件冲突的解决"><span class="toc-text">2.4 、事件冲突的解决</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5、Cancel事件的产生："><span class="toc-text">2.5、Cancel事件的产生：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-7、子控件可以影响父控件是否拦截的行为"><span class="toc-text">2.7、子控件可以影响父控件是否拦截的行为</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、View事件基础知识"><span class="toc-text">1、View事件基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、View事件模型"><span class="toc-text">2、View事件模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-1、事件分发主要分为以下三种情况"><span class="toc-text">​    2.1、事件分发主要分为以下三种情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-2、事件响应"><span class="toc-text">​    2.2、事件响应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#​-2-3-、事件拦截"><span class="toc-text">​    2.3 、事件拦截</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-、事件冲突的解决"><span class="toc-text">2.4 、事件冲突的解决</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5、Cancel事件的产生："><span class="toc-text">2.5、Cancel事件的产生：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-7、子控件可以影响父控件是否拦截的行为"><span class="toc-text">2.7、子控件可以影响父控件是否拦截的行为</span></a></li></ol></li></ol>
 </div>
     
 </div>
@@ -119,7 +119,7 @@
 
 <div class="post-container">
     <div class="post-title">
-        Android知识--View事件传递
+        Android知识(一)--View事件传递
     </div>
 
     <div class="post-meta">
@@ -142,12 +142,12 @@
 <p>　　(3) 对事件的处理包括三类，分别为传递——dispatchTouchEvent()函数、拦截——onInterceptTouchEvent()函数、消费——onTouchEvent()函数和 OnTouchListener；</p>
 <p>　　(4)、事件一定是先到达父控件上；</p>
 <p>　　(5)、父控件和父类不是一回事，这两个概念初学者很容易混淆。</p>
-<h3 id="2、事件模型"><a href="#2、事件模型" class="headerlink" title="2、事件模型"></a>2、事件模型</h3><p>​    所谓的事件模型就是：控件→子控件</p>
+<h3 id="2、View事件模型"><a href="#2、View事件模型" class="headerlink" title="2、View事件模型"></a>2、View事件模型</h3><p>​    所谓的事件模型就是：控件→子控件</p>
 <p>​    事件模型主要涉及到3个概念：事件的分发、事件的拦截、事件的响应。</p>
 <h4 id="​-2-1、事件分发主要分为以下三种情况"><a href="#​-2-1、事件分发主要分为以下三种情况" class="headerlink" title="​    2.1、事件分发主要分为以下三种情况"></a>​    2.1、事件分发主要分为以下三种情况</h4><p>​        A、首先会先调用自身的onInterceptTouchEvent方法，调用此方法的目的是为了，先让自己这个控件判断下是否需要把此事件拦截下来，如果拦截下来，那么就代表自己这个控件需要处理这个事件，所以此时会调用自身onTouchEvent来对这个事件进行响应。</p>
 <p>​        B、如果不拦截下来，那么才会有后续的事件向下传递的流程。将这个事件传递给子控件。现在子控件接收到了这个事件，上文提过，一个事件到达一个View或者ViewGroup，就会最先调用这个控件的dispatchTouchEvent，所以此时，事件到达子控件的dispatchTouchEvent方法，如果这个控件仍然是一个ViewGroup的类型，那么事件继续分发的逻辑依然遵循A流程的逻辑。</p>
 <p>​        C、如果这个子控件只是一个View，而不是ViewGroup，那么此时，事件分发的逻辑略有不同。由于View没有onInterceptTouchEvent的方法，所以当一个事件到达这个View的dispatchTouchEvent的时候，dispatchTouchEvent就调用不到onInterceptTouchEvent，它会直接调用onTouchEvent的方法，直接让这个View来响应此事件。</p>
-<h4 id="​-2-2、事件响应"><a href="#​-2-2、事件响应" class="headerlink" title="​    2.2、事件响应"></a>​    2.2、事件响应</h4><p><img src="//alex0605.github.io/2018/02/24/Android知识-View事件传递/event_respose.jpg" alt="event_respose"></p>
+<h4 id="​-2-2、事件响应"><a href="#​-2-2、事件响应" class="headerlink" title="​    2.2、事件响应"></a>​    2.2、事件响应</h4><p><img src="//alex0605.github.io/2018/02/24/Android知识(一)-View事件传递/event_respose.jpg" alt="event_respose"></p>
 <p>​        如上图所示，如果ViewGroupB拦截了事件，那么此时事件就会由ViewGroupB来响应，调用ViewGroupB中的onTouchEvent，此时ViewGroupB中的onTouchEvent的返回值有两种可能，一种是true，一种是false，如果返回true，则代表ViewGroupB消费了此事件，事件此时终止。如果返回的值是false，那么此时这个事件会回传给父控件，调用到父控件的onTouchEvent方法，由父控件来进行响应，那父控件的onTouchEvent也是同样的逻辑。要么消费事件，要么回传给父控件的父控件。<br>　　此时，就可以得出我们通常所说的两个方向：<br>　　(1)、事件传递的方向：父控件→子控件<br>　　(2)、事件响应的方向：子控件→父控件    </p>
 <p>​    当然，仅仅是这个结论是无法满足我们实际开发的需要，我们需要更细致的分析。这里有一个细节上的问题需要注意，就是事件分为Down事件、Move事件、Up事件，任何一种事件都遵循事件传递和响应的逻辑原则，很多开发者常常会认为Down-Move-Up连在一起才是一个事件的产生，这种想法是不对的。<br>事件的起点是由Down事件开始的，然后产生一系列的Move事件，最后通常以Up事件结束。当Down事件产生的时候，会由父控件传递给子控件，Move事件也由父控件传递给子控件，Up事件也由父控件传递给子控件。它们都遵循同样的传递事件的逻辑流程。不过Down事件最终响应的结果，会影响到后续事件的执行。这句话是什么意思呢？</p>
 <h4 id="​-2-3-、事件拦截"><a href="#​-2-3-、事件拦截" class="headerlink" title="​    2.3 、事件拦截"></a>​    2.3 、事件拦截</h4><p>​    如果Down事件传递到了子View上，但是子View的onTouchEvent对于这个Down事件的处理是return了一个false，这样的结果就是会造成父View的onTouchEvent的调用，同时还有另外一个后果，那就是后续的Move事件、Up事件就都传递不到子View上。所以，如果一个View要处理滑动事件，也就是Move事件的话，那么它一定不能在onTouchEvent中，对Down事件return false。</p>
