@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Android知识(四)--图片信息之ExifInterface - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、Exif-ExifInterface简介"><span class="toc-text">1、Exif-ExifInterface简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、ExifInterface中的功能简单进行介绍"><span class="toc-text">2、ExifInterface中的功能简单进行介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、ExifInterface进行读取操作"><span class="toc-text">3、ExifInterface进行读取操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、ExifInterface进行写入操作"><span class="toc-text">4、ExifInterface进行写入操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5、ExifInterface获取缩略图"><span class="toc-text">5、ExifInterface获取缩略图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6、在ExifInterface获取的信息中进行添加到图片"><span class="toc-text">6、在ExifInterface获取的信息中进行添加到图片</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤一"><span class="toc-text">步骤一</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤二"><span class="toc-text">步骤二</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤三"><span class="toc-text">步骤三</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Android知识(四)--图片信息之ExifInterface
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-02-12 16:49:14</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Android" title="Android">Android</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h3 id="1、Exif-ExifInterface简介"><a href="#1、Exif-ExifInterface简介" class="headerlink" title="1、Exif-ExifInterface简介"></a>1、Exif-ExifInterface简介</h3><p>​    Exif是一种图像文件格式，它的数据存储与JPEG格式是完全相同的。实际上Exif格式就是在JPEG格式头部插入了数码照片的信息，包括拍摄时的光圈、快门、白平衡、ISO、焦距、日期时间等各种和拍摄条件以及相机品牌、型号、色彩编码、拍摄时录制的声音以及GPS全球定位系统数据、缩略图等。你可以利用任何可以查看JPEG文件的看图软件浏览Exif格式的照片，但并不是所有的图形程序都能处理Exif信息。今天这篇文章就来讲讲Android中操作Exif。</p>
+<h3 id="2、ExifInterface中的功能简单进行介绍"><a href="#2、ExifInterface中的功能简单进行介绍" class="headerlink" title="2、ExifInterface中的功能简单进行介绍"></a>2、ExifInterface中的功能简单进行介绍</h3><p>​    Android开发中，在对图片进行展示、编辑、发送等操作时经常会涉及Exif的操作，Android中操作Exif主要是通过ExifInterface，ExifInterface看上去是一个接口，其实是一个类，位于Android.media.ExifInterface的位置。进入ExifInterface类，发现方法很少，主要就是三个方面：读取、写入、缩略图。</p>
+<h3 id="3、ExifInterface进行读取操作"><a href="#3、ExifInterface进行读取操作" class="headerlink" title="3、ExifInterface进行读取操作"></a>3、ExifInterface进行读取操作</h3><p>​    Exif信息在文件头中是以二进制的形式存储的，存储的字段名称和字段值格式都是固定的。我测试的Android23（6.0）版本中，总共有26个Exif字段，其中TAG_SUBSECTIME被加上了@hide注解，也就是还剩25个，我写了个demo，获取这25个字段的值，看看都是什么样的格式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">ExifInterface exifInterface = <span class="keyword">new</span> ExifInterface(filePath);</span><br><span class="line"></span><br><span class="line">String orientation = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);</span><br><span class="line">String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);</span><br><span class="line">String make = exifInterface.getAttribute(ExifInterface.TAG_MAKE);</span><br><span class="line">String model = exifInterface.getAttribute(ExifInterface.TAG_MODEL);</span><br><span class="line">String flash = exifInterface.getAttribute(ExifInterface.TAG_FLASH);</span><br><span class="line">String imageLength = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);</span><br><span class="line">String imageWidth = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);</span><br><span class="line">String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);</span><br><span class="line">String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);</span><br><span class="line">String latitudeRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);</span><br><span class="line">String longitudeRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);</span><br><span class="line">String exposureTime = exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);</span><br><span class="line">String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE);</span><br><span class="line">String isoSpeedRatings = exifInterface.getAttribute(ExifInterface.TAG_ISO);</span><br><span class="line">String dateTimeDigitized = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED);</span><br><span class="line">String subSecTime = exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME);</span><br><span class="line">String subSecTimeOrig = exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME_ORIG);</span><br><span class="line">String subSecTimeDig = exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME_DIG);</span><br><span class="line">String altitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);</span><br><span class="line">String altitudeRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF);</span><br><span class="line">String gpsTimeStamp = exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);</span><br><span class="line">String gpsDateStamp = exifInterface.getAttribute(ExifInterface.TAG_GPS_DATESTAMP);</span><br><span class="line">String whiteBalance = exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);</span><br><span class="line">String focalLength = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);</span><br><span class="line">String processingMethod = exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);</span><br><span class="line"></span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## orientation="</span> + orientation);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## dateTime="</span> + dateTime);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## make="</span> + make);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## model="</span> + model);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## flash="</span> + flash);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## imageLength="</span> + imageLength);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## imageWidth="</span> + imageWidth);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## latitude="</span> + latitude);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## longitude="</span> + longitude);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## latitudeRef="</span> + latitudeRef);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## longitudeRef="</span> + longitudeRef);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## exposureTime="</span> + exposureTime);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## aperture="</span> + aperture);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## isoSpeedRatings="</span> + isoSpeedRatings);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## dateTimeDigitized="</span> + dateTimeDigitized);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## subSecTime="</span> + subSecTime);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## subSecTimeOrig="</span> + subSecTimeOrig);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## subSecTimeDig="</span> + subSecTimeDig);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## altitude="</span> + altitude);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## altitudeRef="</span> + altitudeRef);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## gpsTimeStamp="</span> + gpsTimeStamp);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## gpsDateStamp="</span> + gpsDateStamp);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## whiteBalance="</span> + whiteBalance);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## focalLength="</span> + focalLength);</span><br><span class="line">Log.e(<span class="string">"TAG"</span>, <span class="string">"## processingMethod="</span> + processingMethod);</span><br></pre></td></tr></table></figure>
+<p>打印的结果</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">E/TAG: ## orientation=0</span><br><span class="line">E/TAG: ## dateTime=2016:05:23 17:30:11</span><br><span class="line">E/TAG: ## make=Xiaomi</span><br><span class="line">E/TAG: ## model=Mi-4c</span><br><span class="line">E/TAG: ## flash=16</span><br><span class="line">E/TAG: ## imageLength=4160</span><br><span class="line">E/TAG: ## imageWidth=3120</span><br><span class="line">E/TAG: ## latitude=31/1,58/1,253560/10000</span><br><span class="line">E/TAG: ## longitude=118/1,44/1,491207/10000</span><br><span class="line">E/TAG: ## latitudeRef=N</span><br><span class="line">E/TAG: ## longitudeRef=E</span><br><span class="line">E/TAG: ## exposureTime=0.050</span><br><span class="line">E/TAG: ## aperture=2.0</span><br><span class="line">E/TAG: ## iso=636</span><br><span class="line">E/TAG: ## dateTimeDigitized=2016:05:23 17:30:11</span><br><span class="line">E/TAG: ## subSecTime=379693</span><br><span class="line">E/TAG: ## subSecTimeOrig=379693</span><br><span class="line">E/TAG: ## subSecTimeDig=379693</span><br><span class="line">E/TAG: ## altitude=0/1000</span><br><span class="line">E/TAG: ## altitudeRef=0</span><br><span class="line">E/TAG: ## gpsTimeStamp=9:30:8</span><br><span class="line">E/TAG: ## gpsDateStamp=2016:05:23</span><br><span class="line">E/TAG: ## whiteBalance=0</span><br><span class="line">E/TAG: ## focalLength=412/100</span><br><span class="line">E/TAG: ## processingMethod=NETWORK</span><br></pre></td></tr></table></figure>
+<p>这25个字段分别是代表什么呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ExifInterface.TAG_ORIENTATION <span class="comment">//旋转角度，整形表示，在ExifInterface中有常量对应表示</span></span><br><span class="line">ExifInterface.TAG_DATETIME <span class="comment">//拍摄时间，取决于设备设置的时间</span></span><br><span class="line">ExifInterface.TAG_MAKE <span class="comment">//设备品牌</span></span><br><span class="line">ExifInterface.TAG_MODEL <span class="comment">//设备型号，整形表示，在ExifInterface中有常量对应表示</span></span><br><span class="line">ExifInterface.TAG_FLASH <span class="comment">//闪光灯</span></span><br><span class="line">ExifInterface.TAG_IMAGE_LENGTH <span class="comment">//图片高度</span></span><br><span class="line">ExifInterface.TAG_IMAGE_WIDTH <span class="comment">//图片宽度</span></span><br><span class="line">ExifInterface.TAG_GPS_LATITUDE <span class="comment">//纬度</span></span><br><span class="line">ExifInterface.TAG_GPS_LONGITUDE <span class="comment">//经度</span></span><br><span class="line">ExifInterface.TAG_GPS_LATITUDE_REF <span class="comment">//纬度名（N or S）</span></span><br><span class="line">ExifInterface.TAG_GPS_LONGITUDE_REF <span class="comment">//经度名（E or W）</span></span><br><span class="line">ExifInterface.TAG_EXPOSURE_TIME <span class="comment">//曝光时间</span></span><br><span class="line">ExifInterface.TAG_APERTURE <span class="comment">//光圈值</span></span><br><span class="line">ExifInterface.TAG_ISO <span class="comment">//ISO感光度</span></span><br><span class="line">ExifInterface.TAG_DATETIME_DIGITIZED <span class="comment">//数字化时间</span></span><br><span class="line">ExifInterface.TAG_SUBSEC_TIME <span class="comment">//</span></span><br><span class="line">ExifInterface.TAG_SUBSEC_TIME_ORIG <span class="comment">//</span></span><br><span class="line">ExifInterface.TAG_SUBSEC_TIME_DIG <span class="comment">//</span></span><br><span class="line">ExifInterface.TAG_GPS_ALTITUDE <span class="comment">//海拔高度</span></span><br><span class="line">ExifInterface.TAG_GPS_ALTITUDE_REF <span class="comment">//海拔高度</span></span><br><span class="line">ExifInterface.TAG_GPS_TIMESTAMP <span class="comment">//时间戳</span></span><br><span class="line">ExifInterface.TAG_GPS_DATESTAMP <span class="comment">//日期戳</span></span><br><span class="line">ExifInterface.TAG_WHITE_BALANCE <span class="comment">//白平衡</span></span><br><span class="line">ExifInterface.TAG_FOCAL_LENGTH <span class="comment">//焦距</span></span><br><span class="line">ExifInterface.TAG_GPS_PROCESSING_METHOD <span class="comment">//用于定位查找的全球定位系统处理方法。</span></span><br></pre></td></tr></table></figure>
+<p>其中TAG_SUBSEC_TIME 、TAG_SUBSEC_TIME_ORIG 、TAG_SUBSEC_TIME_DIG 没有加注释，我也没查清楚具体是什么意思，但是看log，三个值是一样的。有知道的朋友可以跟我说下，谢谢！</p>
+<p>细心的朋友会发现，上面所有的取值都是用的一个方法：exifInterface.getAttribute(String tag)，其实ExifInterface还提供了其它方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">exifInterface.getAltitude(<span class="keyword">long</span> <span class="keyword">default</span>); <span class="comment">//返回海拔高度，单位米，如果exif的tag不存在，返回默认值。 </span></span><br><span class="line">exifInterface.getAttributeDouble(String tag, Double <span class="keyword">default</span>) <span class="comment">//返回double值，传入默认值 </span></span><br><span class="line">exifInterface.getAttributeInt(String tag, <span class="keyword">int</span> <span class="keyword">default</span>) <span class="comment">//返回int值，传入默认值 </span></span><br><span class="line">exifInterface.getLatLong(<span class="keyword">float</span>[] value) <span class="comment">//返回纬度和经度，数组第一个是纬度，第二个是经度</span></span><br></pre></td></tr></table></figure>
+<h3 id="4、ExifInterface进行写入操作"><a href="#4、ExifInterface进行写入操作" class="headerlink" title="4、ExifInterface进行写入操作"></a>4、ExifInterface进行写入操作</h3><p>相对读取，写入就简单很多了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ExifInterface exifInterface = <span class="keyword">new</span> ExifInterface(filePath);</span><br><span class="line">exifInterface.setAttribute(ExifInterface.TAG_GPS_ALTITUDE,<span class="string">"1/1000"</span>);</span><br><span class="line">exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION,<span class="string">"6"</span>);</span><br><span class="line">exifInterface.setAttribute(ExifInterface.TAG_IMAGE_WIDTH,<span class="string">"2000"</span>);</span><br><span class="line">exifInterface.saveAttributes();</span><br></pre></td></tr></table></figure>
+<p>代码很简答，但有一点需要说下，setAttributes只是设置属性值，没有保存，saveAttributes才真正保存，但是这个方法比较耗时，不要每set一次都save，全部set完后，再统一save一次。 </p>
+<p>有一点很尴尬，saveAttributes()这个方法内部会遍历保存所有的值，哪怕你只改变了其中一个值。</p>
+<h3 id="5、ExifInterface获取缩略图"><a href="#5、ExifInterface获取缩略图" class="headerlink" title="5、ExifInterface获取缩略图"></a>5、ExifInterface获取缩略图</h3><p>getThumbnail()这个方法可以生成一个缩略图，返回一个字节数组，得到字节数组就可以轻松生成Bitmap。</p>
+<p>但是在调用这个方法前，最好先调用exifInterface.hasThumbnail()判断一下是否有缩略图。</p>
+<p>getThumbnail()这个方法调用的是native方法，所以具体的实现就看不到了，我也不知道生成的缩略图的分辨率是多少。到这里，ExifInterface的使用介绍以及完毕。</p>
+<h3 id="6、在ExifInterface获取的信息中进行添加到图片"><a href="#6、在ExifInterface获取的信息中进行添加到图片" class="headerlink" title="6、在ExifInterface获取的信息中进行添加到图片"></a>6、在ExifInterface获取的信息中进行添加到图片</h3><h4 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h4><p>我们在布局文件中activity_main.xml中的代码，创建一个控件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/activity_main"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">tools:context</span>=<span class="string">"com.yoyoyt.exifinterfacedemo.MainActivity"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/imageview"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"500dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"300dp"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h4><p>我们在MainActivity中找的控制，并获取信息，将信息添加到图片上面。并显示在控件上，具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zalex.exifinterfacedemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.graphics.Bitmap;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Canvas;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Color;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Paint;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Rect;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Typeface;</span><br><span class="line"><span class="keyword">import</span> android.graphics.drawable.BitmapDrawable;</span><br><span class="line"><span class="keyword">import</span> android.graphics.drawable.Drawable;</span><br><span class="line"><span class="keyword">import</span> android.media.ExifInterface;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Environment;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"><span class="keyword">import</span> android.widget.ImageView;</span><br><span class="line"><span class="keyword">import</span> android.widget.Toast;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">        <span class="comment">//获取加载图片的路径</span></span><br><span class="line">String path = Environment.getExternalStorageDirectory().getPath() + <span class="string">"/DCIM/Camera/IMG_20160927_135402.jpg"</span>;</span><br><span class="line"><span class="keyword">private</span> String width;</span><br><span class="line"><span class="keyword">private</span> String height;</span><br><span class="line"><span class="keyword">private</span> Bitmap bitmap;</span><br><span class="line"><span class="keyword">private</span> Bitmap imgTemp;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">    <span class="comment">//找到控件的id</span></span><br><span class="line">    ImageView iv= (ImageView) findViewById(R.id.imageview);</span><br><span class="line">    bitmap = BitmapFactory.decodeFile(path);<span class="comment">//        iv.setImageBitmap(bitmap);</span></span><br><span class="line">         <span class="comment">//android读取图片EXIF信息</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ExifInterface exifInterface=<span class="keyword">new</span> ExifInterface(path);</span><br><span class="line">      <span class="comment">//         执行保存</span></span><br><span class="line">            exifInterface.saveAttributes();</span><br><span class="line">            <span class="comment">//获取图片的方向</span></span><br><span class="line">            String orientation = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);</span><br><span class="line">            <span class="comment">//获取图片的时间</span></span><br><span class="line">            String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);</span><br><span class="line">            String make = exifInterface.getAttribute(ExifInterface.TAG_MAKE);</span><br><span class="line">            String model = exifInterface.getAttribute(ExifInterface.TAG_MODEL);</span><br><span class="line">            String flash = exifInterface.getAttribute(ExifInterface.TAG_FLASH);</span><br><span class="line">             height = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);</span><br><span class="line">             width = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);</span><br><span class="line">            String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);</span><br><span class="line">            String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.append(longitude)</span><br><span class="line">                .append(latitude);</span><br><span class="line"></span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## orientation="</span> + orientation);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## dateTime="</span> + dateTime);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## make="</span> + make);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## model="</span> + model);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## flash="</span> + flash);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## imageLength="</span> + height);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## imageWidth="</span> + width);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## latitude="</span> + latitude);</span><br><span class="line">        Log.e(<span class="string">"TAG"</span>, <span class="string">"## longitude="</span> + longitude);</span><br><span class="line">        String driving_name=<span class="string">"驾校名称:东方时尚驾校"</span>;</span><br><span class="line">        String coach=<span class="string">"教练员姓名:张三"</span>;</span><br><span class="line">        String lerner=<span class="string">"学员姓名:李四"</span>;</span><br><span class="line">        String time=<span class="string">"采集时间:2016"</span>;</span><br><span class="line">        String car_number=<span class="string">"车牌号:京RF8900786"</span>;</span><br><span class="line">        String longt=<span class="string">"102.00"</span>;</span><br><span class="line">        String lat=<span class="string">"35.5"</span>;</span><br><span class="line">        String car_speed=<span class="string">"车辆行驶速度:20km/h"</span>;</span><br><span class="line"></span><br><span class="line">        Toast.makeText(MainActivity.<span class="keyword">this</span>,sb, Toast.LENGTH_LONG).show();</span><br><span class="line">        Drawable drawable = createDrawable(driving_name,coach,lerner,time,car_number,longt,lat,car_speed);</span><br><span class="line">        iv.setBackgroundDrawable(drawable);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 穿件带字母的标记图片</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Drawable <span class="title">createDrawable</span><span class="params">(String driving_name, String coach, String lerner, String time, String car_number, String longt, String lat, String car_speed)</span> </span>&#123;</span><br><span class="line">    imgTemp = Bitmap.createBitmap(Integer.valueOf(width), Integer.valueOf(height), Bitmap.Config.ARGB_8888);</span><br><span class="line">    Canvas canvas = <span class="keyword">new</span> Canvas(imgTemp);</span><br><span class="line">    Paint paint = <span class="keyword">new</span> Paint(); <span class="comment">// 建立画笔</span></span><br><span class="line">    paint.setDither(<span class="keyword">true</span>);</span><br><span class="line">    paint.setFilterBitmap(<span class="keyword">true</span>);</span><br><span class="line">    Rect src = <span class="keyword">new</span> Rect(<span class="number">0</span>, <span class="number">0</span>,Integer.valueOf(width), Integer.valueOf(height));</span><br><span class="line">    Rect dst = <span class="keyword">new</span> Rect(<span class="number">0</span>, <span class="number">0</span>, Integer.valueOf(width), Integer.valueOf(height));</span><br><span class="line">    canvas.drawBitmap(bitmap, src, dst, paint);</span><br><span class="line"></span><br><span class="line">    Paint textPaint = <span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG</span><br><span class="line">            | Paint.DEV_KERN_TEXT_FLAG);</span><br><span class="line">    textPaint.setTextSize(<span class="number">100.0f</span>);</span><br><span class="line">    textPaint.setTypeface(Typeface.DEFAULT_BOLD); <span class="comment">// 采用默认的宽度</span></span><br><span class="line">    textPaint.setColor(Color.WHITE);</span><br><span class="line"></span><br><span class="line">    canvas.drawText(driving_name,Integer.valueOf(width)/<span class="number">100</span>, Integer.valueOf(height)/<span class="number">8</span>,</span><br><span class="line">            textPaint);</span><br><span class="line">    canvas.drawText(coach,<span class="number">0</span>, (Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">100</span>,textPaint);</span><br><span class="line">    canvas.drawText(lerner,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">200</span>,textPaint);</span><br><span class="line">    canvas.drawText(time,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">300</span>,textPaint);</span><br><span class="line">    canvas.drawText(car_number,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">400</span>,textPaint);</span><br><span class="line">    canvas.drawText(longt,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">500</span>,textPaint);</span><br><span class="line">    canvas.drawText(lat,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">600</span>,textPaint);</span><br><span class="line">    canvas.drawText(car_speed,<span class="number">0</span>,(Integer.valueOf(height)/<span class="number">8</span>)+<span class="number">700</span>,textPaint);</span><br><span class="line">    canvas.save(Canvas.ALL_SAVE_FLAG);</span><br><span class="line">    canvas.restore();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (Drawable) <span class="keyword">new</span> BitmapDrawable(getResources(), imgTemp);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h4><p>最后，我们在配置文件中进行添加权限</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.ACCESS_FINE_LOCATION"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.ACCESS_COARSE_LOCATION"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.READ_EXTERNAL_STORAGE"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
