@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JDK源码导读 - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、java-lang"><span class="toc-text">1、java.lang</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、java-util"><span class="toc-text">2、java.util</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、java-util-concurrent"><span class="toc-text">3、java.util.concurrent</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、java-util-concurrent-atomic"><span class="toc-text">4、java.util.concurrent.atomic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、java-lang-reflect"><span class="toc-text">5、java.lang.reflect</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6、java-lang-annotation"><span class="toc-text">6、java.lang.annotation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7、java-util-concurrent-locks"><span class="toc-text">7、java.util.concurrent.locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8、java-io"><span class="toc-text">8、java.io</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9、java-nio"><span class="toc-text">9、java.nio</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10、java-sql"><span class="toc-text">10、java.sql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11、java-net"><span class="toc-text">11、java.net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12、阅读笔记简版"><span class="toc-text">12、阅读笔记简版</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#12-1、Object"><span class="toc-text">12.1、Object</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-2、String"><span class="toc-text">12.2、String</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-3、AbstractStringBuilder"><span class="toc-text">12.3、AbstractStringBuilder</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-4、StringBuffer"><span class="toc-text">12.4、StringBuffer</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-5、StringBuilder-继承AbstractStringBuilder"><span class="toc-text">12.5、StringBuilder 继承AbstractStringBuilder</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-6、ArrayList"><span class="toc-text">12.6、ArrayList</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-7、LinkedList"><span class="toc-text">12.7、LinkedList</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-8、HashMap"><span class="toc-text">12.8、HashMap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-9、Hashtable"><span class="toc-text">12.9、Hashtable</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-10、HashSet：委托给HashMap，其Value是同一个默认对象"><span class="toc-text">12.10、HashSet：委托给HashMap，其Value是同一个默认对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-11、LinkedHashMap继承HashMap"><span class="toc-text">12.11、LinkedHashMap继承HashMap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-12、LinkedHashSet继承HashSet：不知道如何实现的顺序？"><span class="toc-text">12.12、LinkedHashSet继承HashSet：不知道如何实现的顺序？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator"><span class="toc-text">12.13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-14、ConcurrentHashMap"><span class="toc-text">12.14、ConcurrentHashMap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-15、TreeMap"><span class="toc-text">12.15、TreeMap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#12-16、TreeSet：委托TreeMap实现"><span class="toc-text">12.16、TreeSet：委托TreeMap实现</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JDK源码导读
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-02-15 13:55:05</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Java" title="Java">Java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#源码阅读" title="源码阅读">源码阅读</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>注：标题为包名，后面序号为优先级1-4，优先级递减 </p>
+<h4 id="1、java-lang"><a href="#1、java-lang" class="headerlink" title="1、java.lang"></a>1、java.lang</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Object <span class="number">1</span></span><br><span class="line"><span class="number">2</span>) String <span class="number">1</span></span><br><span class="line"><span class="number">3</span>) AbstractStringBuilder <span class="number">1</span></span><br><span class="line"><span class="number">4</span>) StringBuffer <span class="number">1</span></span><br><span class="line"><span class="number">5</span>) StringBuilder <span class="number">1</span></span><br><span class="line"><span class="number">6</span>) Boolean <span class="number">2</span></span><br><span class="line"><span class="number">7</span>) Byte <span class="number">2</span></span><br><span class="line"><span class="number">8</span>) Double <span class="number">2</span></span><br><span class="line"><span class="number">9</span>) Float <span class="number">2</span></span><br><span class="line"><span class="number">10</span>) Integer <span class="number">2</span></span><br><span class="line"><span class="number">11</span>) Long <span class="number">2</span></span><br><span class="line"><span class="number">12</span>) Short <span class="number">2</span></span><br><span class="line"><span class="number">13</span>) Thread <span class="number">2</span></span><br><span class="line"><span class="number">14</span>) ThreadLocal <span class="number">2</span></span><br><span class="line"><span class="number">15</span>) Enum <span class="number">3</span></span><br><span class="line"><span class="number">16</span>) Throwable <span class="number">3</span></span><br><span class="line"><span class="number">17</span>) Error <span class="number">3</span></span><br><span class="line"><span class="number">18</span>) Exception <span class="number">3</span></span><br><span class="line"><span class="number">19</span>) Class <span class="number">4</span></span><br><span class="line"><span class="number">20</span>) ClassLoader <span class="number">4</span></span><br><span class="line"><span class="number">21</span>) Compiler <span class="number">4</span></span><br><span class="line"><span class="number">22</span>) System <span class="number">4</span></span><br><span class="line"><span class="number">23</span>) Package <span class="number">4</span></span><br><span class="line"><span class="number">24</span>) Void <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="2、java-util"><a href="#2、java-util" class="headerlink" title="2、java.util"></a>2、java.util</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) AbstractList <span class="number">1</span></span><br><span class="line"><span class="number">2</span>) AbstractMap <span class="number">1</span></span><br><span class="line"><span class="number">3</span>) AbstractSet <span class="number">1</span></span><br><span class="line"><span class="number">4</span>) ArrayList <span class="number">1</span></span><br><span class="line"><span class="number">5</span>) LinkedList <span class="number">1</span></span><br><span class="line"><span class="number">6</span>) HashMap <span class="number">1</span></span><br><span class="line"><span class="number">7</span>) Hashtable <span class="number">1</span></span><br><span class="line"><span class="number">8</span>) HashSet <span class="number">1</span></span><br><span class="line"><span class="number">9</span>) LinkedHashMap <span class="number">1</span></span><br><span class="line"><span class="number">10</span>) LinkedHashSet <span class="number">1</span></span><br><span class="line"><span class="number">11</span>) TreeMap <span class="number">1</span></span><br><span class="line"><span class="number">12</span>) TreeSet <span class="number">1</span></span><br><span class="line"><span class="number">13</span>) Vector <span class="number">2</span></span><br><span class="line"><span class="number">14</span>) Queue <span class="number">2</span></span><br><span class="line"><span class="number">15</span>) Stack <span class="number">2</span></span><br><span class="line"><span class="number">16</span>) SortedMap <span class="number">2</span></span><br><span class="line"><span class="number">17</span>) SortedSet <span class="number">2</span></span><br><span class="line"><span class="number">18</span>) Collections <span class="number">3</span></span><br><span class="line"><span class="number">19</span>) Arrays <span class="number">3</span></span><br><span class="line"><span class="number">20</span>) Comparator <span class="number">3</span></span><br><span class="line"><span class="number">21</span>) Iterator <span class="number">3</span></span><br><span class="line"><span class="number">22</span>) Base64 <span class="number">4</span></span><br><span class="line"><span class="number">23</span>) Date <span class="number">4</span></span><br><span class="line"><span class="number">24</span>) EventListener <span class="number">4</span></span><br><span class="line"><span class="number">25</span>) Random <span class="number">4</span></span><br><span class="line"><span class="number">26</span>) SubList <span class="number">4</span></span><br><span class="line"><span class="number">27</span>) Timer <span class="number">4</span></span><br><span class="line"><span class="number">28</span>) UUID <span class="number">4</span></span><br><span class="line"><span class="number">29</span>) WeakHashMap <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="3、java-util-concurrent"><a href="#3、java-util-concurrent" class="headerlink" title="3、java.util.concurrent"></a>3、java.util.concurrent</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) ConcurrentHashMap <span class="number">1</span></span><br><span class="line"><span class="number">2</span>) Executor <span class="number">2</span></span><br><span class="line"><span class="number">3</span>) AbstractExecutorService <span class="number">2</span></span><br><span class="line"><span class="number">4</span>) ExecutorService <span class="number">2</span></span><br><span class="line"><span class="number">5</span>) ThreadPoolExecutor <span class="number">2</span></span><br><span class="line"><span class="number">6</span>) BlockingQueue <span class="number">2</span></span><br><span class="line"><span class="number">7</span>）AbstractQueuedSynchronizer <span class="number">2</span></span><br><span class="line"><span class="number">8</span>）CountDownLatch <span class="number">2</span></span><br><span class="line"><span class="number">9</span>) FutureTask <span class="number">2</span></span><br><span class="line"><span class="number">10</span>）Semaphore <span class="number">2</span></span><br><span class="line"><span class="number">11</span>）CyclicBarrier <span class="number">2</span></span><br><span class="line"><span class="number">13</span>）CopyOnWriteArrayList <span class="number">3</span></span><br><span class="line"><span class="number">14</span>）SynchronousQueue <span class="number">3</span></span><br><span class="line"><span class="number">15</span>）BlockingDeque <span class="number">3</span></span><br><span class="line"><span class="number">16</span>) Callable <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="4、java-util-concurrent-atomic"><a href="#4、java-util-concurrent-atomic" class="headerlink" title="4、java.util.concurrent.atomic"></a>4、java.util.concurrent.atomic</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) AtomicBoolean <span class="number">2</span></span><br><span class="line"><span class="number">2</span>) AtomicInteger <span class="number">2</span></span><br><span class="line"><span class="number">3</span>) AtomicLong <span class="number">2</span></span><br><span class="line"><span class="number">4</span>) AtomicReference <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h4 id="5、java-lang-reflect"><a href="#5、java-lang-reflect" class="headerlink" title="5、java.lang.reflect"></a>5、java.lang.reflect</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Field <span class="number">2</span></span><br><span class="line"><span class="number">2</span>) Method <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h4 id="6、java-lang-annotation"><a href="#6、java-lang-annotation" class="headerlink" title="6、java.lang.annotation"></a>6、java.lang.annotation</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Annotation <span class="number">3</span></span><br><span class="line"><span class="number">2</span>) Target <span class="number">3</span></span><br><span class="line"><span class="number">3</span>) Inherited <span class="number">3</span></span><br><span class="line"><span class="number">4</span>) Retention <span class="number">3</span></span><br><span class="line"><span class="number">5</span>) Documented <span class="number">4</span></span><br><span class="line"><span class="number">6</span>) ElementType <span class="number">4</span></span><br><span class="line"><span class="number">7</span>) Native <span class="number">4</span></span><br><span class="line"><span class="number">8</span>) Repeatable <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="7、java-util-concurrent-locks"><a href="#7、java-util-concurrent-locks" class="headerlink" title="7、java.util.concurrent.locks"></a>7、java.util.concurrent.locks</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Lock <span class="number">2</span></span><br><span class="line"><span class="number">2</span>) Condition <span class="number">2</span></span><br><span class="line"><span class="number">3</span>) ReentrantLock <span class="number">2</span></span><br><span class="line"><span class="number">4</span>) ReentrantReadWriteLock <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h4 id="8、java-io"><a href="#8、java-io" class="headerlink" title="8、java.io"></a>8、java.io</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) File <span class="number">3</span></span><br><span class="line"><span class="number">2</span>) InputStream   <span class="number">3</span></span><br><span class="line"><span class="number">3</span>) OutputStream  <span class="number">3</span></span><br><span class="line"><span class="number">4</span>) Reader  <span class="number">4</span></span><br><span class="line"><span class="number">5</span>) Writer  <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="9、java-nio"><a href="#9、java-nio" class="headerlink" title="9、java.nio"></a>9、java.nio</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Buffer <span class="number">3</span></span><br><span class="line"><span class="number">2</span>) ByteBuffer <span class="number">4</span></span><br><span class="line"><span class="number">3</span>) CharBuffer <span class="number">4</span></span><br><span class="line"><span class="number">4</span>) DoubleBuffer <span class="number">4</span></span><br><span class="line"><span class="number">5</span>) FloatBuffer <span class="number">4</span></span><br><span class="line"><span class="number">6</span>) IntBuffer <span class="number">4</span></span><br><span class="line"><span class="number">7</span>) LongBuffer <span class="number">4</span></span><br><span class="line"><span class="number">8</span>) ShortBuffer <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="10、java-sql"><a href="#10、java-sql" class="headerlink" title="10、java.sql"></a>10、java.sql</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Connection <span class="number">3</span></span><br><span class="line"><span class="number">2</span>) Driver <span class="number">3</span></span><br><span class="line"><span class="number">3</span>) DriverManager <span class="number">3</span></span><br><span class="line"><span class="number">4</span>) JDBCType <span class="number">3</span></span><br><span class="line"><span class="number">5</span>) ResultSet <span class="number">4</span></span><br><span class="line"><span class="number">6</span>) Statement <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="11、java-net"><a href="#11、java-net" class="headerlink" title="11、java.net"></a>11、java.net</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) Socket <span class="number">3</span></span><br><span class="line"><span class="number">2</span>) ServerSocket <span class="number">3</span></span><br><span class="line"><span class="number">3</span>) URI <span class="number">4</span></span><br><span class="line"><span class="number">4</span>) URL <span class="number">4</span></span><br><span class="line"><span class="number">5</span>) URLEncoder <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="12、阅读笔记简版"><a href="#12、阅读笔记简版" class="headerlink" title="12、阅读笔记简版"></a>12、阅读笔记简版</h4><h5 id="12-1、Object"><a href="#12-1、Object" class="headerlink" title="12.1、Object"></a>12.1、Object</h5><p>1) wait(), notify(), notifyAll(), wait(timeout)<br>2) hashCode(), equals()<br>3) clone()</p>
+<h5 id="12-2、String"><a href="#12-2、String" class="headerlink" title="12.2、String"></a>12.2、String</h5><p>1) char[] value<br>2) int hash<br>3) equals(), startWith(), endWith(), replace</p>
+<h5 id="12-3、AbstractStringBuilder"><a href="#12-3、AbstractStringBuilder" class="headerlink" title="12.3、AbstractStringBuilder"></a>12.3、AbstractStringBuilder</h5><p>1) char[] value<br>2) int count<br>3) 扩容：翻倍，不够取所需最小</p>
+<h5 id="12-4、StringBuffer"><a href="#12-4、StringBuffer" class="headerlink" title="12.4、StringBuffer"></a>12.4、StringBuffer</h5><p>1) 继承AbstractStringBuilder<br>2) synchronized方法保证线程安全<br>3) char[] toStringCache</p>
+<h5 id="12-5、StringBuilder-继承AbstractStringBuilder"><a href="#12-5、StringBuilder-继承AbstractStringBuilder" class="headerlink" title="12.5、StringBuilder 继承AbstractStringBuilder"></a>12.5、StringBuilder 继承AbstractStringBuilder</h5><h5 id="12-6、ArrayList"><a href="#12-6、ArrayList" class="headerlink" title="12.6、ArrayList"></a>12.6、ArrayList</h5><p>1) Object[] elementData<br>2) int size<br>3) 默认大小10<br>4) 扩容：翻倍，不够取所需最小</p>
+<h5 id="12-7、LinkedList"><a href="#12-7、LinkedList" class="headerlink" title="12.7、LinkedList"></a>12.7、LinkedList</h5><p>1) Node {E item, Node prev, Node next}<br>2) int size<br>3) Node first<br>4) Node last<br>5) linkFirst(), linkLast(), linkBefore(), unLinkFirst(), unLinkLast(), unLink(), indexOf()</p>
+<h5 id="12-8、HashMap"><a href="#12-8、HashMap" class="headerlink" title="12.8、HashMap"></a>12.8、HashMap</h5><p>1) Node{int hash, K key, V value, Node next}<br>2) 默认容量16，负载因子0.75f<br>3) int size, modCount, threshold, float loadFactor<br>4) Node[] table<br>5) Set entrySet<br>6) put():根据key算hash，根据容量和hash算index，table[index]没有直接添加到数组中，table[index]有，若index位置同一个key则更新，否则遍历next是否有，有则更新，无则新增，最后根据thread与size判断是否扩容。注：扩容时容量翻倍，重新算hash复制到新数组<br>7）get()类似<br>注：先比较hash，若相等在比较equals</p>
+<h5 id="12-9、Hashtable"><a href="#12-9、Hashtable" class="headerlink" title="12.9、Hashtable"></a>12.9、Hashtable</h5><p>1) 结构实现与HashMap基本一致<br>2)通过synchronized方法保证线程安全</p>
+<h5 id="12-10、HashSet：委托给HashMap，其Value是同一个默认对象"><a href="#12-10、HashSet：委托给HashMap，其Value是同一个默认对象" class="headerlink" title="12.10、HashSet：委托给HashMap，其Value是同一个默认对象"></a>12.10、HashSet：委托给HashMap，其Value是同一个默认对象</h5><h5 id="12-11、LinkedHashMap继承HashMap"><a href="#12-11、LinkedHashMap继承HashMap" class="headerlink" title="12.11、LinkedHashMap继承HashMap"></a>12.11、LinkedHashMap继承HashMap</h5><p>1) Entry{HashMap.Node, Entry before, after}<br>2) Entry head, tail<br>3) 重写newNode()添加节点时，除像HashMap中添加外，保存before、after信息</p>
+<h5 id="12-12、LinkedHashSet继承HashSet：不知道如何实现的顺序？"><a href="#12-12、LinkedHashSet继承HashSet：不知道如何实现的顺序？" class="headerlink" title="12.12、LinkedHashSet继承HashSet：不知道如何实现的顺序？"></a>12.12、LinkedHashSet继承HashSet：不知道如何实现的顺序？</h5><h5 id="12-13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator"><a href="#12-13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator" class="headerlink" title="12.13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator"></a>12.13、AbstractMap维护EntrySet，AbstractSet维护Iterator，AbstractList维护Iterator</h5><h5 id="12-14、ConcurrentHashMap"><a href="#12-14、ConcurrentHashMap" class="headerlink" title="12.14、ConcurrentHashMap"></a>12.14、ConcurrentHashMap</h5><p>1) JDK1.7及以前：<br>a、Segment[] ,HashEntry[] , HashEntry{hash, k, v, next}<br>b、根据key算hash，根据hash和Segment的大小算位置，每个segment拥有一个自己的HashEntry[]<br>c、get()：不加锁，volatile类型<br>d、put(): 对相应segment加锁<br>e、size()：各HashEntry[] 之和，先不加锁算两遍，若一致则返回，若不一致则加锁重新计算<br>2）JDK1.8<br>a、Node{hash, key, value, next}<br>b、Node[] table<br>c、大多数操作类似于HashMap，不同CAS方式设置，根据key算hash，在根据hash和容量算index，对table[index]加锁，从而达到更大的并发量<br>d、get(): 同HashMap<br>e、put(): 对table[index]加锁</p>
+<h5 id="12-15、TreeMap"><a href="#12-15、TreeMap" class="headerlink" title="12.15、TreeMap"></a>12.15、TreeMap</h5><p>1）红黑树，即自平衡二叉查找树，时间复杂度O(logn)<br>2）Entry{K k, V v, Entry parent, left, right, boolean color}<br>3）Entry root，int size， int modeCount</p>
+<h5 id="12-16、TreeSet：委托TreeMap实现"><a href="#12-16、TreeSet：委托TreeMap实现" class="headerlink" title="12.16、TreeSet：委托TreeMap实现"></a>12.16、TreeSet：委托TreeMap实现</h5>
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
