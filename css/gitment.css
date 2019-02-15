@@ -676,7 +676,7 @@ a.gitment-editor-footer-tip:hover {
     margin: 15px 0;
     overflow: hidden;
     background: transparent;
-    border: 0;
+    border: 1px black;
     border-bottom: 1px solid #dfe2e5;
 }
 
@@ -694,11 +694,13 @@ a.gitment-editor-footer-tip:hover {
 .gitment-markdown table {
     border-spacing: 0;
     border-collapse: collapse;
+	border: 1px solid black;
 }
 
 .gitment-markdown td,
 .gitment-markdown th {
     padding: 0;
+	border: 1px solid black;
 }
 
 .gitment-markdown h1,
