@@ -1216,24 +1216,60 @@ pre .javascript .function {
   text-indent: 0;
 }
 
- table{
-            border-collapse: collapse;
-            margin: 0 auto;
-            text-align: center;
- }
-table td, table th{
-            border: 1px solid #cad9ea;
-            color: #666;
-            height: 30px;
+table {
+    background-color: #FFF;
+    border: none;
+    color: #565;
+    font: 12px arial;
 }
- table thead th{
-            background-color: #CCE8EB;
-            width: 100px;
- }
-table tr:nth-child(odd) {
-            background: #fff;
- }
- table tr:nth-child(even) {
-            background: #F5FAFA;
+
+table caption {
+    font-size: 24px;
+    border-bottom: 1px solid #B3DE94;
+    border-top: 1px solid #B3DE94;
+}
+
+table, td, th {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    text-align:left;
+}
+
+tbody td, tbody th {
+    background-color: #DFC;
+    border-bottom: 1px solid #B3DE94;
+    border-top: 1px solid #FFFFFF;
+    padding: 9px;
+}
+
+
+tfoot td, tfoot th {
+    font-weight: bold;
+    padding: 4px 8px 6px 9px;
+    text-align:center;
+}
+
+thead th {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 19px;
+    padding: 0 8px 2px;
+    text-align:center;
+}
+
+tbody tr.odd th,tbody tr.odd td { /*odd就是偶数行*/
+    background-color: #CEA;
+    border-bottom: 1px solid #67BD2A;
+}
+
+td+td+td, /*第三个td以及之后的td元素*/
+col.price{ /*类样式*/
+    text-align:right;
+}
+
+tbody tr:hover td, tbody tr:hover th { /*tr也有hover样式*/
+    background-color: #8b7;
+    color:#fff;
 }
 
