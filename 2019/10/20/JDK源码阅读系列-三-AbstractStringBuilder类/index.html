@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JDK源码阅读系列(三)--AbstractStringBuilder类 - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-成员变量"><span class="toc-text">1.成员变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-构造函数"><span class="toc-text">2.构造函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-容量和长度"><span class="toc-text">3.容量和长度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-AbstractStringBuilder的扩容"><span class="toc-text">4.AbstractStringBuilder的扩容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-字符串减少存储空间"><span class="toc-text">5.字符串减少存储空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-setLength-int-newLength"><span class="toc-text">6.setLength(int newLength)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-char-charAt-int-index"><span class="toc-text">7.char charAt(int index)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-void-getChars-int-srcBegin-int-srcEnd-char-dst-int-dstBegin"><span class="toc-text">8.void getChars(int srcBegin, int srcEnd, char dst[],  int dstBegin)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-void-setCharAt-int-index-char-ch"><span class="toc-text">9.void setCharAt(int index, char ch)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-append-String-str"><span class="toc-text">10.append(String str)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-append-CharSequence-s-int-start-int-end"><span class="toc-text">11.append(CharSequence s, int start, int end)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-append-char-str"><span class="toc-text">12.append(char str[])</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-append-char-str-1"><span class="toc-text">12.append(char str[])</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13-append-boolean-b"><span class="toc-text">13.append(boolean b)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#14-append-int-i"><span class="toc-text">14.append(int i)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15-delete-int-start-int-end"><span class="toc-text">15.delete(int start, int end)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16-reverse"><span class="toc-text">16.reverse()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17-String-toString"><span class="toc-text">17.String toString()</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JDK源码阅读系列(三)--AbstractStringBuilder类
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-10-20 21:50:11</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Java" title="Java">Java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#源码阅读" title="源码阅读">源码阅读</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>​    因为看StringBuffer 和 StringBuilder 的源码时发现两者都继承了AbstractStringBuilder，并且很多方法都是直接super的父类AbstractStringBuilder的方法，所以还是决定先看AbstractStringBuilder的源码，然后再看StringBuffer 和 StringBuilder.</p>
+<h4 id="1-成员变量"><a href="#1-成员变量" class="headerlink" title="1.成员变量"></a>1.成员变量</h4><pre><code>AbstractStringBuilder和String一样，在其内部都是以字符数组的形式实现的。也就是String,StringBuffer以及StringBuilder在其内部都是以字符数组的形式实现的。
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> value[];</span><br><span class="line"><span class="keyword">int</span> count;</span><br></pre></td></tr></table></figure>
+<h4 id="2-构造函数"><a href="#2-构造函数" class="headerlink" title="2.构造函数"></a>2.构造函数</h4><p>​    AbstractStringBuilder的构造函数中传入的capacity是指容量，实际长度是以leng中的count表示的，注意区分容量和实际长度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AbstractStringBuilder() &#123;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> AbstractStringBuilder(<span class="keyword">int</span> capacity) &#123;</span><br><span class="line">     value = <span class="keyword">new</span> <span class="keyword">char</span>[capacity];</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-容量和长度"><a href="#3-容量和长度" class="headerlink" title="3.容量和长度"></a>3.容量和长度</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">length</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">capacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> value.length;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-AbstractStringBuilder的扩容"><a href="#4-AbstractStringBuilder的扩容" class="headerlink" title="4.AbstractStringBuilder的扩容"></a>4.AbstractStringBuilder的扩容</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">(<span class="keyword">int</span> minimumCapacity)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (minimumCapacity &gt; value.length) &#123;<span class="comment">//如果传入的容量大于原来的容量就扩容</span></span><br><span class="line">	    expandCapacity(minimumCapacity);</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">expandCapacity</span><span class="params">(<span class="keyword">int</span> minimumCapacity)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> newCapacity = (value.length + <span class="number">1</span>) * <span class="number">2</span>;<span class="comment">//首先默认扩容为  （原容量+1）*2</span></span><br><span class="line">        <span class="keyword">if</span> (newCapacity &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            newCapacity = Integer.MAX_VALUE;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (minimumCapacity &gt; newCapacity) &#123;<span class="comment">//如果传入的容量大于 默认扩容量，则传入容量为新容量</span></span><br><span class="line">	    newCapacity = minimumCapacity;</span><br><span class="line">	&#125;</span><br><span class="line">        value = Arrays.copyOf(value, newCapacity);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5-字符串减少存储空间"><a href="#5-字符串减少存储空间" class="headerlink" title="5.字符串减少存储空间"></a>5.字符串减少存储空间</h4><p>如果实际长度小于容量，为了减少存储空间，就把容量缩小为刚好满足字符串长度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trimToSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (count &lt; value.length) &#123;</span><br><span class="line">            value = Arrays.copyOf(value, count);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6-setLength-int-newLength"><a href="#6-setLength-int-newLength" class="headerlink" title="6.setLength(int newLength)"></a>6.setLength(int newLength)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLength</span><span class="params">(<span class="keyword">int</span> newLength)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (newLength &lt; <span class="number">0</span>)</span><br><span class="line">	    <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(newLength);</span><br><span class="line">	<span class="keyword">if</span> (newLength &gt; value.length)<span class="comment">//设置长度大于容量时先扩容</span></span><br><span class="line">	    expandCapacity(newLength);</span><br><span class="line"><span class="keyword">if</span> (count &lt; newLength) &#123;<span class="comment">//设置长度大于原来长度时，后面部分补以空白</span></span><br><span class="line">    <span class="keyword">for</span> (; count &lt; newLength; count++)</span><br><span class="line">	value[count] = <span class="string">'\0'</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        count = newLength;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="7-char-charAt-int-index"><a href="#7-char-charAt-int-index" class="headerlink" title="7.char charAt(int index)"></a>7.char charAt(int index)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">char</span> <span class="title">charAt</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ((index &lt; <span class="number">0</span>) || (index &gt;= count))</span><br><span class="line">	    <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(index);</span><br><span class="line">	<span class="keyword">return</span> value[index];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="8-void-getChars-int-srcBegin-int-srcEnd-char-dst-int-dstBegin"><a href="#8-void-getChars-int-srcBegin-int-srcEnd-char-dst-int-dstBegin" class="headerlink" title="8.void getChars(int srcBegin, int srcEnd, char dst[],  int dstBegin)"></a>8.void getChars(int srcBegin, int srcEnd, char dst[],  int dstBegin)</h4><p>一定要注意参数情况的考虑，自己编程时一定要养成好习惯。主要是调用了System.arraycopy()的方法，以后具体分析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getChars</span><span class="params">(<span class="keyword">int</span> srcBegin, <span class="keyword">int</span> srcEnd, <span class="keyword">char</span> dst[],</span></span></span><br><span class="line"><span class="function"><span class="params">                                     <span class="keyword">int</span> dstBegin)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line"><span class="keyword">if</span> (srcBegin &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(srcBegin);</span><br><span class="line"><span class="keyword">if</span> ((srcEnd &lt; <span class="number">0</span>) || (srcEnd &gt; count))</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(srcEnd);</span><br><span class="line">       <span class="keyword">if</span> (srcBegin &gt; srcEnd)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(<span class="string">"srcBegin &gt; srcEnd"</span>);</span><br><span class="line">System.arraycopy(value, srcBegin, dst, dstBegin, srcEnd - srcBegin);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="9-void-setCharAt-int-index-char-ch"><a href="#9-void-setCharAt-int-index-char-ch" class="headerlink" title="9.void setCharAt(int index, char ch)"></a>9.void setCharAt(int index, char ch)</h4><p>方法的源码很简单，是直接替换该index的值，而不是后移之类的，因为是数组，不可变长度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCharAt</span><span class="params">(<span class="keyword">int</span> index, <span class="keyword">char</span> ch)</span> </span>&#123;</span><br><span class="line"><span class="keyword">if</span> ((index &lt; <span class="number">0</span>) || (index &gt;= count))</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(index);</span><br><span class="line">value[index] = ch;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="10-append-String-str"><a href="#10-append-String-str" class="headerlink" title="10.append(String str)"></a>10.append(String str)</h4><p>对于StringBuffer和StringBuilder重要的append()方法的源码闪亮登场咯~~</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (str == <span class="keyword">null</span>) str = <span class="string">"null"</span>;<span class="comment">//若传入为null,则会在后面加上“null”</span></span><br><span class="line">        <span class="keyword">int</span> len = str.length();</span><br><span class="line">	<span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">this</span>;<span class="comment">//传入长度为0，则返回本身</span></span><br><span class="line">	<span class="keyword">int</span> newCount = count + len;</span><br><span class="line">	<span class="keyword">if</span> (newCount &gt; value.length)<span class="comment">//传入后的长度大于容量就扩容</span></span><br><span class="line">	    expandCapacity(newCount);</span><br><span class="line">	str.getChars(<span class="number">0</span>, len, value, count);<span class="comment">//用的是getChars()为value传值</span></span><br><span class="line">	count = newCount;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="11-append-CharSequence-s-int-start-int-end"><a href="#11-append-CharSequence-s-int-start-int-end" class="headerlink" title="11.append(CharSequence s, int start, int end)"></a>11.append(CharSequence s, int start, int end)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(CharSequence s, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (s == <span class="keyword">null</span>)</span><br><span class="line">           s = <span class="string">"null"</span>;</span><br><span class="line"><span class="keyword">if</span> ((start &lt; <span class="number">0</span>) || (end &lt; <span class="number">0</span>) || (start &gt; end) || (end &gt; s.length()))<span class="comment">//一定要注意情况考虑</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(</span><br><span class="line">               <span class="string">"start "</span> + start + <span class="string">", end "</span> + end + <span class="string">", s.length() "</span> </span><br><span class="line">               + s.length());</span><br><span class="line"><span class="keyword">int</span> len = end - start;</span><br><span class="line"><span class="keyword">if</span> (len == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line"><span class="keyword">int</span> newCount = count + len;</span><br><span class="line"><span class="keyword">if</span> (newCount &gt; value.length)</span><br><span class="line">    expandCapacity(newCount);</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i=start; i&lt;end; i++)<span class="comment">//用的是charAt()为value循环赋值</span></span><br><span class="line">           value[count++] = s.charAt(i);<span class="comment">//!!</span></span><br><span class="line">       count = newCount;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="12-append-char-str"><a href="#12-append-char-str" class="headerlink" title="12.append(char str[])"></a>12.append(char str[])</h4><p>若是字符数组，用的是System.arraycopy（）方法。</p>
+<h4 id="12-append-char-str-1"><a href="#12-append-char-str-1" class="headerlink" title="12.append(char str[])"></a>12.append(char str[])</h4><p>若是字符数组，用的是System.arraycopy（）方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(<span class="keyword">char</span> str[])</span> </span>&#123; </span><br><span class="line"><span class="keyword">int</span> newCount = count + str.length;</span><br><span class="line"><span class="keyword">if</span> (newCount &gt; value.length)</span><br><span class="line">    expandCapacity(newCount);</span><br><span class="line">       System.arraycopy(str, <span class="number">0</span>, value, count, str.length);</span><br><span class="line">       count = newCount;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="13-append-boolean-b"><a href="#13-append-boolean-b" class="headerlink" title="13.append(boolean b)"></a>13.append(boolean b)</h4><p>这个源码很简单</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(<span class="keyword">boolean</span> b)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (b) &#123;</span><br><span class="line">           <span class="keyword">int</span> newCount = count + <span class="number">4</span>;</span><br><span class="line">           <span class="keyword">if</span> (newCount &gt; value.length)</span><br><span class="line">               expandCapacity(newCount);</span><br><span class="line">           value[count++] = <span class="string">'t'</span>;</span><br><span class="line">           value[count++] = <span class="string">'r'</span>;</span><br><span class="line">           value[count++] = <span class="string">'u'</span>;</span><br><span class="line">           value[count++] = <span class="string">'e'</span>;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">int</span> newCount = count + <span class="number">5</span>;</span><br><span class="line">           <span class="keyword">if</span> (newCount &gt; value.length)</span><br><span class="line">               expandCapacity(newCount);</span><br><span class="line">           value[count++] = <span class="string">'f'</span>;</span><br><span class="line">           value[count++] = <span class="string">'a'</span>;</span><br><span class="line">           value[count++] = <span class="string">'l'</span>;</span><br><span class="line">           value[count++] = <span class="string">'s'</span>;</span><br><span class="line">           value[count++] = <span class="string">'e'</span>;</span><br><span class="line">       &#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="14-append-int-i"><a href="#14-append-int-i" class="headerlink" title="14.append(int i)"></a>14.append(int i)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == Integer.MIN_VALUE) &#123;</span><br><span class="line">            append(<span class="string">"-2147483648"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> appendedLength = (i &lt; <span class="number">0</span>) ? stringSizeOfInt(-i) + <span class="number">1</span> : stringSizeOfInt(i);<span class="comment">//!!!</span></span><br><span class="line">        <span class="keyword">int</span> spaceNeeded = count + appendedLength;</span><br><span class="line">        <span class="keyword">if</span> (spaceNeeded &gt; value.length)</span><br><span class="line">            expandCapacity(spaceNeeded);</span><br><span class="line">	Integer.getChars(i, spaceNeeded, value);</span><br><span class="line">        count = spaceNeeded;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> [] sizeTable = &#123; <span class="number">9</span>, <span class="number">99</span>, <span class="number">999</span>, <span class="number">9999</span>, <span class="number">99999</span>, <span class="number">999999</span>, <span class="number">9999999</span>,</span><br><span class="line">                                     <span class="number">99999999</span>, <span class="number">999999999</span>, Integer.MAX_VALUE &#125;;</span><br><span class="line"><span class="comment">// Requires positive x</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">stringSizeOfInt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; ; i++)</span><br><span class="line">        <span class="keyword">if</span> (x &lt;= sizeTable[i])</span><br><span class="line">            <span class="keyword">return</span> i+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="15-delete-int-start-int-end"><a href="#15-delete-int-start-int-end" class="headerlink" title="15.delete(int start, int end)"></a>15.delete(int start, int end)</h4><p>主要还是用的System.arraycopy()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public AbstractStringBuilder delete(int start, int end) &#123;</span><br><span class="line">	if (start &lt; 0)</span><br><span class="line">	    throw new StringIndexOutOfBoundsException(start);</span><br><span class="line">	if (end &gt; count)</span><br><span class="line">	    end = count;</span><br><span class="line">	if (start &gt; end)</span><br><span class="line">	    throw new StringIndexOutOfBoundsException();</span><br><span class="line">        int len = end - start;</span><br><span class="line">        if (len &gt; 0) &#123;</span><br><span class="line">            System.arraycopy(value, start+len, value, start, count-end);</span><br><span class="line">            count -= len;</span><br><span class="line">        &#125;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="16-reverse"><a href="#16-reverse" class="headerlink" title="16.reverse()"></a>16.reverse()</h4><p>这个是StringBuffer和StringBuilder常用到的方法，而String并没有这个牛逼的功能~~</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">reverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">boolean</span> hasSurrogate = <span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">int</span> n = count - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = (n-<span class="number">1</span>) &gt;&gt; <span class="number">1</span>; j &gt;= <span class="number">0</span>; --j) &#123;</span><br><span class="line">	    <span class="keyword">char</span> temp = value[j];</span><br><span class="line">	    <span class="keyword">char</span> temp2 = value[n - j];</span><br><span class="line">	    <span class="keyword">if</span> (!hasSurrogate) &#123;</span><br><span class="line">		hasSurrogate = (temp &gt;= Character.MIN_SURROGATE &amp;&amp; temp &lt;= Character.MAX_SURROGATE)</span><br><span class="line">		    || (temp2 &gt;= Character.MIN_SURROGATE &amp;&amp; temp2 &lt;= Character.MAX_SURROGATE);</span><br><span class="line">	    &#125;</span><br><span class="line">	    value[j] = temp2;</span><br><span class="line">	    value[n - j] = temp;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (hasSurrogate) &#123;</span><br><span class="line">	    <span class="comment">// Reverse back all valid surrogate pairs</span></span><br><span class="line">	    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count - <span class="number">1</span>; i++) &#123;</span><br><span class="line">		<span class="keyword">char</span> c2 = value[i];</span><br><span class="line">		<span class="keyword">if</span> (Character.isLowSurrogate(c2)) &#123;</span><br><span class="line">		    <span class="keyword">char</span> c1 = value[i + <span class="number">1</span>];</span><br><span class="line">		    <span class="keyword">if</span> (Character.isHighSurrogate(c1)) &#123;</span><br><span class="line">			value[i++] = c1;</span><br><span class="line">			value[i] = c2;</span><br><span class="line">		    &#125;</span><br><span class="line">		&#125;</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="17-String-toString"><a href="#17-String-toString" class="headerlink" title="17.String toString()"></a>17.String toString()</h4><p>这个只是一个抽象的方法，没有方法体。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">toString</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br>
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
