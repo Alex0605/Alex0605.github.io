@@ -1217,8 +1217,9 @@ pre .javascript .function {
 }
 
 table {
-	border-collapse:collapse;
     background-color: #FFF;
+	border: 1px solid #cad9ea;
+	border-collapse: collapse;
 }
 tbody td, tbody th {
 	text-align:center; 
