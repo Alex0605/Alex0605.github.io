@@ -1221,10 +1221,10 @@ table {
 	border: 1px solid #cad9ea;
 	border-collapse: collapse;
 }
-tbody td, tbody th {
+tbody td, tbody th,tbody tr {
     border:1px solid #cad9ea; 
 }
-thead th {
+thead th,thead tr {
     border:1px solid #cad9ea; 
 }
 
