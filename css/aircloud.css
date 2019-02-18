@@ -1222,9 +1222,5 @@ table {
 tbody td, tbody th {
     border:1px solid #cad9ea; 
 }
-tfoot td, tfoot th {
-	border:1px solid #cad9ea; 
-}
-thead th {
-	border:1px solid #cad9ea; 
-}
+
+
