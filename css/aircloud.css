@@ -1222,7 +1222,9 @@ table {
 	border-collapse: collapse;
 }
 tbody td, tbody th {
-	text-align:center; 
+    border:1px solid #cad9ea; 
+}
+thead th {
     border:1px solid #cad9ea; 
 }
 
