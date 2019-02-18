@@ -1220,6 +1220,7 @@ table {
     background-color: #FFF;
     border: 1px solid #cad9ea;
     border-collapse: collapse;
+	width:100%
 }
 tbody td, tbody th,tbody tr {
     border:1px solid #cad9ea; 
