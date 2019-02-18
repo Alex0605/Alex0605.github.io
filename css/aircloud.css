@@ -1218,13 +1218,14 @@ pre .javascript .function {
 
 table {
     background-color: #FFF;
-    border-collapse: collapse;
 }
 tbody td, tbody th,tbody tr {
+    border:1px solid #cad9ea; 
     vertical-align: middle;
     text-align: center;
 }
 thead th,thead tr {
+    border:1px solid #cad9ea;
 	vertical-align: middle;
     text-align: center;
 }
