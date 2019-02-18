@@ -1219,7 +1219,7 @@ pre .javascript .function {
 table {
     background-color: #FFF;
 }
-td, th {
+tbody, td, th {
     border:1px solid #cad9ea; 
 }
 
