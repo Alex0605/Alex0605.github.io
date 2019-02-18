@@ -1225,7 +1225,9 @@ tbody td, tbody th,tbody tr {
     border:1px solid #cad9ea; 
 }
 thead th,thead tr {
-    border:1px solid #cad9ea; 
+    border:1px solid #cad9ea;
+	vertical-align: middle;
+    text-align: center;
 }
 
 
