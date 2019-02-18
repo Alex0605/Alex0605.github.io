@@ -1220,6 +1220,7 @@ table {
     background-color: #FFF;
 }
 tbody td, tbody th {
+	text-align:center; 
     border:1px solid #cad9ea; 
 }
 
