@@ -1215,10 +1215,6 @@ pre .javascript .function {
 .gitment-comment p {
   text-indent: 0;
 }
-
-table {
-    background-color: #FFF;
-}
 tbody td, tbody th,tbody tr {
     border:1px solid #cad9ea; 
     vertical-align: middle;
