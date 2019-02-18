@@ -1219,19 +1219,12 @@ pre .javascript .function {
 table {
     background-color: #FFF;
 }
-table, td, th {
-	border: 1px solid black;
-}
 tbody td, tbody th {
-    border: 1px solid black;
+    border:1px solid #cad9ea; 
 }
 tfoot td, tfoot th {
-	border: 1px solid black;
+	border:1px solid #cad9ea; 
 }
 thead th {
-	border: 1px solid black;
+	border:1px solid #cad9ea; 
 }
-
-
-
-
