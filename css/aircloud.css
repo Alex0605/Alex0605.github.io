@@ -1217,6 +1217,7 @@ pre .javascript .function {
 }
 
 table {
+	border-collapse:collapse;
     background-color: #FFF;
 }
 tbody td, tbody th {
