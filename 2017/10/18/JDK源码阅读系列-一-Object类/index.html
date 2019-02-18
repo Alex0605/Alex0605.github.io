@@ -123,7 +123,7 @@
     </div>
 
     <div class="post-meta">
-        <span class="attr">发布于：<span>2019-02-18 13:35:00</span></span>
+        <span class="attr">发布于：<span>2017-10-18 13:35:00</span></span>
         
         <span class="attr">标签：/
         
@@ -141,7 +141,7 @@
     </div>
     <div class="post-content ">
         <h3 id="1、Object-方法"><a href="#1、Object-方法" class="headerlink" title="1、Object 方法"></a>1、Object 方法</h3><p>java.lang.Object为java所有类的基类，所以一般的类都可用重写或直接使用Object下方法，以下为逻辑结构图:</p>
-<p><img src="//alex0605.github.io/2019/02/18/JDK源码阅读系列-一-Object类/object_logic.png" alt="object_logic"></p>
+<p><img src="//alex0605.github.io/2017/10/18/JDK源码阅读系列-一-Object类/object_logic.png" alt="object_logic"></p>
 <p><strong><u>注： 以上绿色方法为 非native方法  粉色方法为 native方法</u></strong></p>
 <p>Object类中的方法如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Object()：构造方法。 </span><br><span class="line">registerNatives()：装载本地库。 </span><br><span class="line">getClass()：返回此 Object的运行时类。 </span><br><span class="line">hashCode()：返回对象的哈希码值。 </span><br><span class="line">equals(Object)：指示一些其他对象是否等于此。 </span><br><span class="line">clone()：创建并返回此对象的副本。 </span><br><span class="line">toString()：返回对象的字符串表示形式。 </span><br><span class="line">notify()：唤醒正在等待对象监视器的单个线程。 </span><br><span class="line">notifyAll()：唤醒正在等待对象监视器的所有线程。 </span><br><span class="line">wait(<span class="keyword">long</span>)：使当前线程等待，直到另一个线程调用notify()方法或该对象的notifyAll()方法，或指定时间已过。 </span><br><span class="line">wait(<span class="keyword">long</span>,<span class="keyword">int</span>)：使当前线程等待，直到另一个线程调用该对象的notify()方法或notifyAll()方法，或指定时间已过。 </span><br><span class="line">wait()：使当前线程等待，直到另一个线程调用该对象的notify()方法或notifyAll()方法。 </span><br><span class="line">finalize()：当垃圾收集确定不再有对该对象的引用时，在对象上调用该方法。</span><br></pre></td></tr></table></figure>
