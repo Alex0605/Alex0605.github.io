@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Android Studio Gradle详解 - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、AppExtension类及其属性"><span class="toc-text">1、AppExtension类及其属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-基础介绍"><span class="toc-text">1.1 基础介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-AppExtension的属性"><span class="toc-text">1.2 AppExtension的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-AppExtension的闭包"><span class="toc-text">1.3 AppExtension的闭包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-AppExtension的方法"><span class="toc-text">1.4 AppExtension的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-参考文档"><span class="toc-text">1.5 参考文档</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Android Studio Gradle详解
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-01-18 17:10:52</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Android" title="Android">Android</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#Gradle" title="Gradle">Gradle</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="1、AppExtension类及其属性"><a href="#1、AppExtension类及其属性" class="headerlink" title="1、AppExtension类及其属性"></a>1、AppExtension类及其属性</h2><h3 id="1-1-基础介绍"><a href="#1-1-基础介绍" class="headerlink" title="1.1 基础介绍"></a>1.1 基础介绍</h3><p>&emsp; &emsp;可能大部分人看到AppExtension类会感觉到非常的陌生，其实我们在app中的build.gradle中填写配置信息的时候，经常看到它，它是什么呢？<br>&emsp; &emsp;如果你按ctrl+鼠标左键对着android{},点击进去就知道了，其实android{…}表示的就是AppExtension这个类。<br>下图是AppExtension 继承关系<br><img src="https://github.com/Alex0605/Alex0605.github.io/blob/master/img/gradle_lib.png" alt="app"><br>&emsp; &emsp;除了AppExtension之外还有2个类与之相似，LibraryExtension和TestExtension<br>&emsp; &emsp;如果是module项目作为lib使用，那么lib下的build.gradle中的android对应的是LibraryExtension</p>
+<h3 id="1-2-AppExtension的属性"><a href="#1-2-AppExtension的属性" class="headerlink" title="1.2 AppExtension的属性"></a>1.2 AppExtension的属性</h3><ul>
+<li>aaptOptions：aapt是一个可以将资源文件编译成二进制文件的工具。aaptOptions表示  aapt工具设置的可选项参数。 </li>
+<li>adbExecutable：adb从编译sdk时执行</li>
+<li>adbOptions：adb的可选项参数 </li>
+<li>applicationVariants：应用变体列表 </li>
+<li>buildToolsVersion：构建工具版本(必要的) </li>
+<li>buildTypes：构建类型(一般是release和debug，还可以自定义) </li>
+<li>compileOptions：编译可选项参数 </li>
+<li>compileSdkVersion：编译sdk版本(必要的) </li>
+<li>dataBinding：Data Binding可选项参数(关于DataBinding的使用) </li>
+<li>defualtConfig：默认配置，对于所有的打包项目 </li>
+<li>defualtPublishConfig：默认是release。</li>
+<li>dexOptions：Dex可选项参数。 </li>
+<li>externalNativeBuild：native编译支持。</li>
+<li>flavorDimensionList：</li>
+<li>generatePureSplits：是否拆成多个APK </li>
+<li>jacoco：JaCoCo可选项参数 </li>
+<li>lintOptions：Lint工具可选项参数</li>
+<li>ndkDirectory：ndk目录(一般在local.properties中) </li>
+<li>packagingOptions：packaging的可选参数 </li>
+<li>productFlavors：项目所有flavor </li>
+<li>publishNonDefualt：不仅仅使用默认的publish artifacts。可参defualtPublishConfig。              </li>
+<li>resourcePrefix：创建新资源时使用的前缀。 </li>
+<li>sdkDirectory：sdk目录(一般在local.properties中) </li>
+<li>signingConfigs：签名文件的可选项参数 </li>
+<li>sourceSets：资源文件目录指定(Android中有自己的AndroidSourceSets，这个一般用于assets，jin等目录) splits：splits类型。</li>
+<li>testBuildType：测试构建类型</li>
+<li>testOptions：测试可选项参数 </li>
+<li>testVariants：测试变体 </li>
+<li>unitTestVariants：单元测试变体 </li>
+<li>variantFilter：变体过滤器,加粗的表示DSL语言的闭包,如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buildTypes &#123; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="1-3-AppExtension的闭包"><a href="#1-3-AppExtension的闭包" class="headerlink" title="1.3 AppExtension的闭包"></a>1.3 AppExtension的闭包</h3><p>&emsp; &emsp;与app中build.gradle中android{}一样，代码中由AppExtension类表示。其他的配置闭包也一样。<br>1、aaptOptions{}代码由AaptOptions类表示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">AaptOptions的属性：</span><br><span class="line">additionalParameters:额外参数，List类型。</span><br><span class="line">cruncherEnabled：如果PNG图片是否可以大量快速的处理，boolean类型。 true表示可以。</span><br><span class="line">cruncherProcesses:快速处理，可能需要更多的内存和CPU。int类型。默认0，值越大处理越快，需要的内存和CPU也越大。</span><br><span class="line">failOnMissingConfigEntry:如果没有找到一个配置，就返回一个错误。Boolean值，默认false。</span><br><span class="line">ignoreAssetsPattern：忽略Assets模块。</span><br><span class="line">moCompress：拓展文件不会打包进apk中。</span><br><span class="line"> </span><br><span class="line">用法(详细用法可能需要去看看文档了)：</span><br><span class="line">aaptOptions&#123;</span><br><span class="line">    cruncherEnabled true//快速处理PNG图片</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、adbOption{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adbOptions&#123;&#125;对应的是AdbOptions</span><br><span class="line">AdbOptions的属性：</span><br><span class="line">installOptions：apk安装的可选参数。</span><br><span class="line">timeOutInMs：使用adb的超时时间。</span><br></pre></td></tr></table></figure></p>
+<p>3、buildTypes{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">buildTypes&#123;&#125;对应的是BuildType类</span><br><span class="line"> </span><br><span class="line">buildTypes的属性：</span><br><span class="line"> </span><br><span class="line">applicationIdSuffix：应用id后缀(给Applica)</span><br><span class="line">consumerProguardFiles：混淆文件包含在arr包中。</span><br><span class="line">debuggable：是否生成一个debug的apk</span><br><span class="line">embedMicroApp：可穿戴设备app是否可以使用这个编译类型</span><br><span class="line">javaCompileOption：Java编译配置参数</span><br><span class="line">jniDebuggable：这个编译类型的配置是否可以与debuggable的native代码生成一个apk</span><br><span class="line">manifestPlaceholders：清单占位符</span><br><span class="line">minifyEnabled：是否缩小</span><br><span class="line">multiDexEnabled：是否拆成多个Dex</span><br><span class="line">multiDexKeepFile：指定文本文件编译进主Dex文件中</span><br><span class="line">multiDexKeepProguard：指定混淆文件编译进主Dex文件中</span><br><span class="line">name：build type的名字</span><br><span class="line">proguardFiles：混淆文件</span><br><span class="line">pseudoLocalesEnabled：是否生成伪现场apk(如果没有提供混淆规则文件，则设置默认的混淆规则文件（SDK/tools/proguard/proguard-android.txt）)</span><br><span class="line">renderscriptDebuggable：使用RenderScript编译器的优化级别。</span><br><span class="line">shrinkResources：是否去除未利用的资源，默认false，表示不去除。</span><br><span class="line">signingConfig：签名配置</span><br><span class="line">testCoverageEnabled：测试覆盖率是否被激活。</span><br><span class="line">useJack：过时</span><br><span class="line">versionNameSuffix：版本名称后缀</span><br><span class="line"> zipAlignEnable：是否使用zipalign工具压缩。</span><br><span class="line"> </span><br><span class="line">------------------------------------------------------</span><br><span class="line"> </span><br><span class="line">buildType的方法：</span><br><span class="line"> </span><br><span class="line">buildConfigField(type,name,value)：添加一个变量生成BuildConfig类。</span><br><span class="line">consumeProguardFile(proguardFile)：添加一个混淆文件进arr包。</span><br><span class="line">consumeProguardFile(proguardFiles)：添加混淆文件进arr包。</span><br><span class="line">externalNativeBuild(action)：配置本地的build选项。</span><br><span class="line">initWith：复制这个build类型的所有属性。</span><br><span class="line">proguardFile(proguardFile)：添加一个新的混淆配置文件。</span><br><span class="line">proguradFiles(files):添加新的混淆文件</span><br><span class="line">resValue(type,name,value)：添加一个新的生成资源</span><br><span class="line">setProguardFiles(proguardFileIterable):设置一个混淆配置文件。</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">buildType用法：</span><br><span class="line"> </span><br><span class="line">  buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled true</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">            shrinkResources true</span><br><span class="line">            zipAlignEnabled true</span><br><span class="line">            debuggable false</span><br><span class="line">            //...</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        debug&#123;</span><br><span class="line">            minifyEnabled true</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">            shrinkResources true</span><br><span class="line">            zipAlignEnabled true</span><br><span class="line">            debuggable true</span><br><span class="line">            //...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>4、compileOptions{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">compileOptions&#123;&#125;对应的是CompileOptions</span><br><span class="line"></span><br><span class="line">CompileOptions的属性：</span><br><span class="line">encoding：Java源文件的编码格式</span><br><span class="line">incremental：是否应该使用Java编写的Gradle新的增量模型</span><br><span class="line">sourceCompatibility：指定编译编译.java文件的jdk版本</span><br><span class="line">targetCompatibility：确保class文件与targetCompatibility指定版本，或者更新的java虚拟机兼容</span><br></pre></td></tr></table></figure></p>
+<p>5、dataBinding{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">dataBinding&#123;&#125;对应的是DataBindingOptions</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">DataBindingOptions的属性：</span><br><span class="line"> </span><br><span class="line">addDefualtAdapters：是否添加一个默认的data binding适配器。默认true。</span><br><span class="line">enabled：是否使用data binding</span><br><span class="line">version：data binding使用版本</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">dataBinding的使用：</span><br><span class="line"> </span><br><span class="line">dataBinding&#123;</span><br><span class="line">    enabled true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>6、defualtConfig{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">defaultConfig&#123;&#125;是所有flavor都共有的配置。</span><br><span class="line"> </span><br><span class="line">英文解释：The default configuration, inherited by all product flavors (if any are defined).</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">defaultConfig的使用：</span><br><span class="line"> </span><br><span class="line"> defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.zhang.demo&quot;</span><br><span class="line">        minSdkVersion 15</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>7、dexOptions{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">dexOptions&#123;&#125;对应的是DexOptions</span><br><span class="line"> </span><br><span class="line">DexOptions属性:</span><br><span class="line"> </span><br><span class="line">additionalParameters：给dx添加一系列附加的参数</span><br><span class="line">javaMaxHeapSize：当调用dx时指定-Xmx值。</span><br><span class="line">jumboMode：使用jumbo(庞大的)模式</span><br><span class="line">keepRuntimeAnnotatedClasses：保持所有类中的运行时的注解在主Dex中。</span><br><span class="line">maxProcessCount：可以使用Dex的最大并发进程数。默认为4。</span><br><span class="line">optimize：运行在dx编译器是否有optimize标记。</span><br><span class="line">preDexLibraries：是否预先dex库，它可以改善增量的生成，但是在clear build可能会变慢</span><br><span class="line">threadCount：当dx运行时使用的线程的数量。默认4个。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">dexOptions&#123;&#125;的用法：</span><br><span class="line"> </span><br><span class="line">dexOptions &#123;</span><br><span class="line">    preDexLibraries  false</span><br><span class="line">    javaMaxHeapSize &quot;4g&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>8、externalNativeBuild{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">externalNativeBuild&#123;&#125;对应的是ExternalNativeBuild</span><br><span class="line"> </span><br><span class="line">ExternalNativeBuild的属性：</span><br><span class="line"> </span><br><span class="line">cmake：CMake工具编译选项。</span><br><span class="line">ndkBuild：ndk-build选项。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">在externalNativeBuild&#123;&#125;中有2个模块，cmake&#123;&#125;和ndkBuild&#123;&#125;模块</span><br><span class="line"> </span><br><span class="line">------------------------------------------------</span><br><span class="line">cmake&#123;&#125;对应的是CmakeOptions</span><br><span class="line"> </span><br><span class="line">CmakeOption的属性：</span><br><span class="line">path：你的CmakeLists.txt编译脚本的相对路径。</span><br><span class="line"> </span><br><span class="line">--------------------------------------------------</span><br><span class="line">ndkBuild&#123;&#125;对应的是NdkBuildOptions</span><br><span class="line"> </span><br><span class="line">NdkBuildOptions的属性：</span><br><span class="line">path:你的Android.mk文件的相对路径。</span><br><span class="line"> </span><br><span class="line">--------------------------------------------------</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">externalNativeBuild&#123;&#125;的用法：</span><br><span class="line"> </span><br><span class="line">externalNativeBuild&#123;</span><br><span class="line">    ndkBuild&#123;</span><br><span class="line">        path file(&quot;src\\main\\jni\\Android.mk&quot;)</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    cmake &#123;</span><br><span class="line">        path &quot;src/main/cpp/CMakeLists.txt&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>9、jacoco{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">jacoco&#123;&#125;对应于JacocoOptions</span><br><span class="line"> </span><br><span class="line">JacocoOptions的属性：</span><br><span class="line">1.version：过时</span><br><span class="line"> </span><br><span class="line">英文原文：</span><br><span class="line">note: this property is deprecated and will be removed in a future version of the plugin.</span><br></pre></td></tr></table></figure></p>
+<p>10、lintOptions{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">lintOptions&#123;&#125;对应于LintOptions</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">LintOptions的属性：</span><br><span class="line">abortOnError：如果发现错误，lint工具是否应该退出这个程序。true表示退出。</span><br><span class="line">absolutePaths：是否在输出错误的时候，lint应该展示出全路径。默认是相对路径，也就是默认false。</span><br><span class="line">check：精确的检查(搜集)问题的集合，默认情况下，任何问题都可以通过LintOptions.getEnable()启用，没有问题可以通过LintOptions.getDisable()使之无效。</span><br><span class="line">checkAllWarnings：是否检查所有警告，包括那些默认关闭。</span><br><span class="line">disable：通过id&apos;s来压制这个问题，允许修改</span><br><span class="line">enable：通过id&apos;s来处理这个问题，循序修改，他会将添加id，并返回一个集合。</span><br><span class="line">explainIssues：返回lint是否包含错误问题的解释(注意：HTML和XML报告会无条件的去做，忽略这个设置)。</span><br><span class="line">htmlOutput：html输出方式。</span><br><span class="line">htmlReport：我们应该是否写一个HTML报告，默认true， 这个使用场景由LintOptions.getHtmlOutput()控制。</span><br><span class="line">ignoreWarings：lint仅仅检查错误，忽略警告。</span><br><span class="line">lintConfig：默认配置文件作为备份。</span><br><span class="line">noLines：lint在输出错误日志的时候，是否包含行数。默认true。</span><br><span class="line">quiet：lint是否应该quiet(安静)。如：报告文件写入路径，不写消息。</span><br><span class="line">severityOverrides：An optional map of severity overrides. The map maps from issue id&apos;s to the corresponding severity to use, which must be &quot;fatal&quot;, &quot;error&quot;, &quot;warning&quot;, or &quot;ignore&quot;.</span><br><span class="line">showAll：lint是否包含所有的输出。</span><br><span class="line">textOutput：文本输出方式。</span><br><span class="line">textReport：是否是文本报告写入，默认false。</span><br><span class="line">warningAsErrors：lint是否把警告当做错误来处理。</span><br><span class="line">xmlOutput：XML输出方式。</span><br><span class="line">xmlReport：XML格式写入报告，默认true。</span><br><span class="line"> </span><br><span class="line">------------------------------------------------</span><br><span class="line"> </span><br><span class="line">LintOptions的方法：</span><br><span class="line"> </span><br><span class="line">check(id)：检查这个id的问题的集合</span><br><span class="line">check(ids)：</span><br><span class="line">disable(id)：将id添加到不用启动的问题集</span><br><span class="line">disable(ids)：</span><br><span class="line">enable(id)：将id添加到启动的问题集</span><br><span class="line">enable(ids)</span><br><span class="line">error(id)：将id添加到错误的问题集</span><br><span class="line">error(ids)</span><br><span class="line">fatal(id)：将id添加到fatal级别的问题集</span><br><span class="line">fatal(ids)</span><br><span class="line">ignore(id)：将id添加到ignore级别的问题集</span><br><span class="line">ignore(ids)</span><br><span class="line">waring(id)：将id添加到waring级别的问题集</span><br><span class="line">waring(ids)</span><br><span class="line"> </span><br><span class="line">------------------------------------------------</span><br><span class="line"> </span><br><span class="line">lintOptions&#123;&#125;的一般用法：</span><br><span class="line"> </span><br><span class="line">lintOptions &#123;</span><br><span class="line">    abortOnError false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>11、packagingOptions{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">packagingOptions&#123;&#125;对应的是PackagingOptions</span><br><span class="line">Packaging options有三组路径：first-picks，merges和excludes:</span><br><span class="line">packagingOptions&#123;&#125;的用法：</span><br><span class="line">packagingOptions &#123;</span><br><span class="line">    pickFirsts = [] // Not really needed because the default is empty.</span><br><span class="line">    merges = []     // Not really needed because the default is empty.</span><br><span class="line">    excludes = []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>12、productFlavors{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">productFlavors&#123;&#125;对应的是ProductFlavors</span><br><span class="line"> </span><br><span class="line">ProductFlavors的属性：</span><br><span class="line"> </span><br><span class="line">applicationId：应用程序ID。</span><br><span class="line">applicationIdSuffix：应用程序ID后缀。</span><br><span class="line">consumerProguardFiles：混淆规则文件被包含在aar包中。</span><br><span class="line">dimension：flavor名称的尺寸。</span><br><span class="line">externalNativeBuild：详情见externalNativeBuild&#123;&#125;</span><br><span class="line">flavorDeminsion：过时</span><br><span class="line">generatedDensities：过时</span><br><span class="line">jackOption：jack配置可选项。</span><br><span class="line">javaCompileOptions：Java编译配置参数</span><br><span class="line">manifestPlaceholders：manifest占位符</span><br><span class="line">multiDexEnabled：是否进行dex拆分</span><br><span class="line">multiDexKeepFile：文本文件编译进主dex文件中。</span><br><span class="line">multiDexKeepProgroud：文本文件作为混淆规则编译进主dex文件中</span><br><span class="line">ndk：ndk配置</span><br><span class="line">proguardFiles:混淆文件</span><br><span class="line">signingConfig：这个flavor的签名配置信息</span><br><span class="line">testApplicationId：测试应用ID</span><br><span class="line">testFunctionalTest：</span><br><span class="line">testHandleProfiling：</span><br><span class="line">testInstrumentationRunner：</span><br><span class="line">testInstrumentionRunnerArguments：</span><br><span class="line">useJack：过时</span><br><span class="line">verctorDrawables：生成矢量图支持</span><br><span class="line">versionCode：版本号</span><br><span class="line">versionName:版本名</span><br><span class="line">versionNameSuffix：版本名后缀</span><br><span class="line">wearAppUnbundled：是否对嵌入式穿戴app进行拆分模式。如果true，那么这个app将在应用市场被分发为穿戴设备的app。</span><br><span class="line"> </span><br><span class="line">productFlavor&#123;&#125;的用法：</span><br><span class="line">productFlavors &#123;</span><br><span class="line"> </span><br><span class="line">        googlePlay &#123;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        xiaomi &#123;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">//所有打包配置（批量处理打包渠道--&gt; manifestPlaceholders：设置打包渠道）</span><br><span class="line">productFlavors.all &#123;</span><br><span class="line">    //平台id</span><br><span class="line">    flavor -&gt; flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>13、signingConfig{}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">signingConfig&#123;&#125;对应的是SigningConfig</span><br><span class="line"> </span><br><span class="line">SigningConfig的属性：</span><br><span class="line"> </span><br><span class="line">keyAlias：签名使用key的别名</span><br><span class="line">KeyPassword：签名使用的key的密码</span><br><span class="line">storeFile：store签名文件</span><br><span class="line">storePassword：store签名密码</span><br><span class="line">storeType：store签名类型</span><br><span class="line">SigningEnabled：是否使用jar签名(又名v1签名)。</span><br><span class="line">v2SigningEnabled：是否使用apk签名(又名v2签名)。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">signingConfig&#123;&#125;的用法：</span><br><span class="line"> </span><br><span class="line">signingConfigs &#123;</span><br><span class="line">    config &#123;</span><br><span class="line">        keyAlias &apos;...&apos;</span><br><span class="line">        keyPassword &apos;...&apos;</span><br><span class="line">        storeFile file(&apos;C:/../Key.jks&apos;)</span><br><span class="line">        storePassword &apos;...&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>14、sourceSets{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">sourceSets&#123;&#125;对应的AndroidSourceSet</span><br><span class="line"> </span><br><span class="line">AndroidSourceSet的属性：</span><br><span class="line"> </span><br><span class="line">aidl：aidl目录</span><br><span class="line">assets：assets目录</span><br><span class="line">compileConfiguraName：编译配置资源目录。</span><br><span class="line">java：java代码目录（需要编译成.class文件）</span><br><span class="line">jni：jni资源目录</span><br><span class="line">jniLibs：jni库目录</span><br><span class="line">manifest：AndroidManifest.xml资源文件</span><br><span class="line">name：source set名称。</span><br><span class="line">packageConfigurationName：运行时配置的资源集。</span><br><span class="line">providedConfigurationName：仅仅编译时配置的资源集。</span><br><span class="line">renderscript：RenderScript脚本资源目录</span><br><span class="line">res：Android资源目录</span><br><span class="line">resource：java资源被复制到输出到javaresource目录</span><br><span class="line"> </span><br><span class="line">AndroidSourceSet的方法：</span><br><span class="line">1.setRoot(path)：资源集的根目录，所有的资源都在这个跟目录下。</span><br><span class="line"> </span><br><span class="line">sourceSets&#123;&#125;的使用：</span><br><span class="line">sourceSets &#123;</span><br><span class="line">    //在main目录中</span><br><span class="line">    main &#123;</span><br><span class="line">        //assets目录设置</span><br><span class="line">        assets.srcDirs = [&apos;assets&apos;]</span><br><span class="line">        //jni目录设置</span><br><span class="line">        jni.srcDirs &apos;src/main/jni&apos;</span><br><span class="line">        //jni库设置</span><br><span class="line">        jniLibs.srcDir &apos;src/main/jniLibs&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>15、splits{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">splits&#123;&#125;对应的是Splites</span><br><span class="line"> </span><br><span class="line">Splits的属性：</span><br><span class="line"> </span><br><span class="line">abi：ABI设置</span><br><span class="line">abiFilters：用于多个apk的ABI筛选列表</span><br><span class="line">density：密度设置</span><br><span class="line">densityFilters：用于多个apk的密度筛选列表</span><br><span class="line">language：语言设置。</span><br><span class="line">languageFilters：用于多个apk的语言筛选列表</span><br><span class="line"> </span><br><span class="line">-----------------------------------------------------</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">Spiltes对应有三个模块，abi&#123;&#125;,density&#123;&#125;,language&#123;&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">abi&#123;&#125;对应的是AbiSplitOptions</span><br><span class="line"> </span><br><span class="line">AbiSplitsOptions的属性：</span><br><span class="line">applicableFilters：返回此范围的所有适用筛选器的列表。</span><br><span class="line">enable：是否在这个范围分裂</span><br><span class="line">universalApk：是否创建所有可用的ABIs一个APK。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">AbiSplitesOptions的方法：</span><br><span class="line">exclude(excludes)：排除一些值。</span><br><span class="line">include(include)：包含一些值。</span><br><span class="line">reset()：重新设置split配置。</span><br><span class="line"> </span><br><span class="line">----------------------------------------------------------</span><br><span class="line"> </span><br><span class="line">density&#123;&#125;对应的是DensitySplitOptions</span><br><span class="line"> </span><br><span class="line">DensitySplitOptions的属性：</span><br><span class="line">applicableFilters：返回此范围的所有适用筛选器的列表。</span><br><span class="line">auto：编译系统是否确定分割“language-*”文件夹中的资源。</span><br><span class="line">compatibleScreen：兼容屏幕列表</span><br><span class="line">enable：是否拆分</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">DensitySplitOptions的方法：</span><br><span class="line">1.exclude(exclude):排除一些值</span><br><span class="line">2.include(include):包含一些值</span><br><span class="line">3.reset()：重新设置split配置。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> </span><br><span class="line">language&#123;&#125;对应的是LanguageSplitOptions</span><br><span class="line"> </span><br><span class="line">LanguageSplitOptions的属性：</span><br><span class="line">1.enable：如果true，就是拆分language</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">LanguageSplitOptions的方法：</span><br><span class="line">1.include(include)：包含一个模型。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">---------------------------------------------------------</span><br><span class="line"> </span><br><span class="line">splits&#123;&#125;的用法：</span><br><span class="line"> </span><br><span class="line">splits &#123;</span><br><span class="line">    density &#123;</span><br><span class="line">        enable true</span><br><span class="line">        exclude &apos;ldpi&apos;, &apos;mdpi&apos;</span><br><span class="line">        compatibleScreens &apos;normal&apos;, &apos;large&apos;, &apos;xlarge&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line">生成结果：</span><br><span class="line">app-hdpi-release.apk</span><br><span class="line">app-universal-release.apk</span><br><span class="line">app-xhdpi-release.apk</span><br><span class="line">app-xxhdpi-release.apk</span><br><span class="line">app-xxxhdpi-release.apk</span><br><span class="line"> </span><br><span class="line">splits &#123;</span><br><span class="line">    abi &#123;</span><br><span class="line">      enable true</span><br><span class="line">      reset()</span><br><span class="line">      include &apos;x86&apos;, &apos;armeabi-v7a&apos;, &apos;mips&apos;</span><br><span class="line">      universalApk true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">这个就是生成不同手机架构的app</span><br></pre></td></tr></table></figure></p>
+<p>16、testOptions{}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">testOptions&#123;&#125;对应的是TestOptions</span><br><span class="line"> </span><br><span class="line">TestOptions的属性：</span><br><span class="line">1.reportDir：报告目录</span><br><span class="line">2.resultDir：结果目录</span><br><span class="line">3.unitTests：单元测试配置参数</span><br><span class="line"> </span><br><span class="line">TestOptions包含unitTests&#123;&#125;</span><br><span class="line"> </span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> </span><br><span class="line">unitTests&#123;&#125;对应的是UnitTestOptions</span><br><span class="line"> </span><br><span class="line">UnitTestOptions的属性：</span><br><span class="line">1.returnDefaultValues：无论unmocked方法从android.jar中抛出异常或是默认值（0或null）。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">UnitTestOtions的方法：</span><br><span class="line">all(configClosure)：配置所有单元测试任务。</span><br><span class="line"> </span><br><span class="line">-------------------------------------------------</span><br><span class="line"> </span><br><span class="line">testOptions&#123;&#125;的使用：</span><br><span class="line"> </span><br><span class="line">testOptions &#123;</span><br><span class="line">    resultsDir = &quot;$project.buildDir/foo/results&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-4-AppExtension的方法"><a href="#1-4-AppExtension的方法" class="headerlink" title="1.4 AppExtension的方法"></a>1.4 AppExtension的方法</h3><ul>
+<li>flavorDimensions(dimension):指定flavor名称</li>
+<li>useLibraray(name)：请求使用一个lib库</li>
+<li>useLibrary(name,required)：与上面解释一样。</li>
+</ul>
+<h3 id="1-5-参考文档"><a href="#1-5-参考文档" class="headerlink" title="1.5 参考文档"></a>1.5 参考文档</h3><p><a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.BuildType.html" target="_blank" rel="noopener">1、BuildType官方文档</a></p>
+<p><a href="https://blog.csdn.net/qq_33689414/article/details/52205703" target="_blank" rel="noopener">2、DataBinding详细用法</a></p>
+<p><a href="https://blog.csdn.net/jdh99/article/details/51765441" target="_blank" rel="noopener">3、Android Studio2.2 配置NDK</a></p>
+<p><a href="https://blog.csdn.net/lmw21848/article/details/52183584" target="_blank" rel="noopener">4、Android studio 2.2 使用cmake编译NDK</a></p>
+<p><a href="https://blog.csdn.net/yishon_android/article/details/51864699" target="_blank" rel="noopener">5、Android Studio官方文档之使用Lint</a></p>
+<p><a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.PackagingOptions.html" target="_blank" rel="noopener">6、PackagingOptions官方文档</a></p>
+<p><a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.ProductFlavor.html" target="_blank" rel="noopener">7、ProductFlavor官方文档</a></p>
+<p><a href="http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits" target="_blank" rel="noopener">8、APK-splite官方文档</a></p>
+<p><a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.Splits.html" target="_blank" rel="noopener">9、Splite官方文档</a></p>
+<p><a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.AaptOptions.html" target="_blank" rel="noopener">10、AaptOptions官方</a></p>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

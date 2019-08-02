@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JDK源码阅读系列(一)--Object类 - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、Object-方法"><span class="toc-text">1、Object 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、Object"><span class="toc-text">2、Object()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、registerNatives"><span class="toc-text">3、registerNatives()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、getClass"><span class="toc-text">3、getClass()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、hashCode"><span class="toc-text">4、hashCode()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5、equals-Object"><span class="toc-text">5、equals(Object)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6、clone"><span class="toc-text">6、clone()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7、toString"><span class="toc-text">7、toString()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8、notify"><span class="toc-text">8、notify()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9、notifyAll"><span class="toc-text">9、notifyAll()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10、wait-long"><span class="toc-text">10、wait(long)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11、wait-long-int"><span class="toc-text">11、wait(long, int)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12、wait"><span class="toc-text">12、wait()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13、finalize"><span class="toc-text">13、finalize()</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JDK源码阅读系列(一)--Object类
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-10-18 13:35:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Java" title="Java">Java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#源码阅读" title="源码阅读">源码阅读</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h3 id="1、Object-方法"><a href="#1、Object-方法" class="headerlink" title="1、Object 方法"></a>1、Object 方法</h3><p>java.lang.Object为java所有类的基类，所以一般的类都可用重写或直接使用Object下方法，以下为逻辑结构图:</p>
+<p><img src="/2017/10/18/JDK源码阅读系列-一-Object类/object_logic.png" alt="object_logic"></p>
+<p><strong><u>注： 以上绿色方法为 非native方法  粉色方法为 native方法</u></strong></p>
+<p>Object类中的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Object()：构造方法。 </span><br><span class="line">registerNatives()：装载本地库。 </span><br><span class="line">getClass()：返回此 Object的运行时类。 </span><br><span class="line">hashCode()：返回对象的哈希码值。 </span><br><span class="line">equals(Object)：指示一些其他对象是否等于此。 </span><br><span class="line">clone()：创建并返回此对象的副本。 </span><br><span class="line">toString()：返回对象的字符串表示形式。 </span><br><span class="line">notify()：唤醒正在等待对象监视器的单个线程。 </span><br><span class="line">notifyAll()：唤醒正在等待对象监视器的所有线程。 </span><br><span class="line">wait(<span class="keyword">long</span>)：使当前线程等待，直到另一个线程调用notify()方法或该对象的notifyAll()方法，或指定时间已过。 </span><br><span class="line">wait(<span class="keyword">long</span>,<span class="keyword">int</span>)：使当前线程等待，直到另一个线程调用该对象的notify()方法或notifyAll()方法，或指定时间已过。 </span><br><span class="line">wait()：使当前线程等待，直到另一个线程调用该对象的notify()方法或notifyAll()方法。 </span><br><span class="line">finalize()：当垃圾收集确定不再有对该对象的引用时，在对象上调用该方法。</span><br></pre></td></tr></table></figure>
+<h3 id="2、Object"><a href="#2、Object" class="headerlink" title="2、Object()"></a>2、Object()</h3><p>​    类构造器是创建Java对象的途径之一。一个类必须要有一个构造器的存在，如果没有显示声明，那么系统会默认创造一个无参构造器。<br>​    在JDK的Object类源码中，我们可以发现并没有看到构造器的，系统会自动添加一个无参构造器。<br>我们可以通过以下代码构造一个Object类的对象： Object obj = new Object();</p>
+<h3 id="3、registerNatives"><a href="#3、registerNatives" class="headerlink" title="3、registerNatives()"></a>3、registerNatives()</h3><p>源码如下： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">registerNatives</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这是一个本地方法。<br>我们接着往下看，可以看到这样一段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    registerNatives();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们知道一个类定义了本地方法后，想要调用操作系统的实现，必须还要装载本地库。上面的这段代码是一个静态代码块，所以在类加载的时候会执行该方法，通过该方法来注册本地方法。</p>
+<p>对应的C代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> JNINativeMethod methods[] = &#123;</span><br><span class="line">    &#123;<span class="string">"hashCode"</span>,    <span class="string">"()I"</span>,                    (<span class="keyword">void</span> *)&amp;JVM_IHashCode&#125;,</span><br><span class="line">    &#123;<span class="string">"wait"</span>,        <span class="string">"(J)V"</span>,                   (<span class="keyword">void</span> *)&amp;JVM_MonitorWait&#125;,</span><br><span class="line">    &#123;<span class="string">"notify"</span>,      <span class="string">"()V"</span>,                    (<span class="keyword">void</span> *)&amp;JVM_MonitorNotify&#125;,</span><br><span class="line">    &#123;<span class="string">"notifyAll"</span>,   <span class="string">"()V"</span>,                    (<span class="keyword">void</span> *)&amp;JVM_MonitorNotifyAll&#125;,</span><br><span class="line">    &#123;<span class="string">"clone"</span>,       <span class="string">"()Ljava/lang/Object;"</span>,   (<span class="keyword">void</span> *)&amp;JVM_Clone&#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_java_lang_Object_registerNatives(JNIEnv *env, jclass cls)</span><br><span class="line">&#123;</span><br><span class="line">    (*env)-&gt;RegisterNatives(env, cls,</span><br><span class="line">                            methods, <span class="keyword">sizeof</span>(methods)/<span class="keyword">sizeof</span>(methods[<span class="number">0</span>]));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3、getClass"><a href="#3、getClass" class="headerlink" title="3、getClass()"></a>3、getClass()</h3><p>接下来来看该方法的源码：<br>public final native Class&lt;?&gt; getClass();</p>
+<p>该方法被声明为public final native方法，这说明该方法无法被重写，且是一个本地方法。<br>通过API文档说明，我们可以知道该方法的作用是返回一个对象的运行时类，通过这个类对象我们可以获取该运行时类的相关属性和方法。</p>
+<p>我们知道Java中还可以通过 类名.class 获取这个类的类对象，我们来比较一下这两种用法有什么区别，来加深对这个方法的理解。<br>我们写一个父类： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>再写一个子类： </p>
+<p>再写一个子类： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>再来一段测试代码</p>
+<p>再来一段测试代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Parent p = <span class="keyword">new</span> Son();</span><br><span class="line">        System.out.println(p.getClass());</span><br><span class="line">        System.out.println(Parent.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们运行一下，输出如下：</p>
+<p>class test.Son<br>class test.Parent<br>1<br>2</p>
+<h3 id="4、hashCode"><a href="#4、hashCode" class="headerlink" title="4、hashCode()"></a>4、hashCode()</h3><p>来看源码：<br>public native int hashCode();</p>
+<p>这也是一个用 native 声明的本地方法，作用是返回对象的散列码，是 int 类型的数值。<br>通过刚才查看API文档，我们可以知道hashcode的3个约定： </p>
+<ol>
+<li>在程序运行时期间，只要对象的变化不会影响equals方法的判断结果，那么，在这个期间无论调用多少次hashCode，都必须返回同一个散列码。 </li>
+<li>通过equals调用返回true的2个对象的hashCode一定一样。 </li>
+<li>通过equasl返回false的2个对象的散列码可以一样也可以不一样。</li>
+</ol>
+<p>也就是说：<br>两个对象相等，其hashCode一定相同;<br>两个对象不相等，其hashCode有可能相同;<br>hashCode相同的两个对象，不一定相等;<br>hashCode不相同的两个对象，一定不相等;</p>
+<p>那么这个方法有什么用呢？<br>我们知道在Java 中有几种集合类，其中Set存放的元素是不可重复的。<br>在Set中，每增加一个元素，我们就通过equals方法判断集合中的每一个元素是否重复。如果集合中有10000个元素，我们新加入一个元素时，那就需要进行10000次equals方法的调用，这显然效率很低。<br>于是，Java就采用了哈希表来实现。哈希算法也称为散列算法，是将数据依特定算法产生的结果直接指定到一个地址上。这个结果就是由hashCode方法产生。当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的物理位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了；不相同的话，也就是发生了Hash key相同导致冲突的情况，那么就在这个Hash key的地方产生一个链表，将所有产生相同HashCode的对象放到这个单链表上去，串在一起。这样一来实际调用equals方法的次数就大大降低了。</p>
+<p>那也许我们会想，对于不能重复的集合比如Set，为什么不让hashCode对于每个元素都产生唯一的值，相等的元素就产生一样的hashcode，不一样的元素就产生不一样的hashcode，这样不就完全不需要调用equals方法来判断是否相同了吗？<br>实际上对于元素不是很多的情况下，直接通过hashCode产生唯一的索引值，通过这个索引值能直接找到元素，而且还能判断是否相同，这很好。就像数据库存储的数据的主键或者是rowid一样，我们能通过主键或者rowid直接找到某个元素。但实际上，很难实现hashCode的唯一算法，就算能实现，产生的hashCode码也是非常大的，这会大的超过int所能表示的范围，很占内存空间。</p>
+<p>所以，我们在编写hashcode方法时要注意以下几点： </p>
+<ul>
+<li>不同对象的hash码应该尽量不同，避免hash冲突，也就是算法获得的元素要尽量均匀分布。 </li>
+<li>hash 值是int 类型，在Java中占用4个字节，也就是2的32次方，不要溢出。 </li>
+<li>对于Map集合，我们可以选取Java中的基本类型，以及String作为 key，因为它们都按照规范重写了equals方法和hashCode方法。但是如果你用自定义对象作为key，那么一定要重写 equals方法和hashCode方法。</li>
+</ul>
+<p>像Integer类，String类等都重写了hashCode方法，我们自定义对象的hashCode方法可以参考这些类来写。</p>
+<h3 id="5、equals-Object"><a href="#5、equals-Object" class="headerlink" title="5、equals(Object)"></a>5、equals(Object)</h3><p>方法源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看了源码我们知道，在Object类中，==运算符和equals方法是等价的，都是比较两个对象的引用是否相等。对于我们自定义的一个对象，如果不重写equals方法，那么在比较对象的时候就是调用Object类的equals方法，也就是用==运算符比较两个对象。</p>
+<p>这里我们看一下String类中重写equals方法的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line">        <span class="keyword">int</span> n = value.length;</span><br><span class="line">        <span class="keyword">if</span> (n == anotherString.value.length) &#123;</span><br><span class="line">            <span class="keyword">char</span> v1[] = value;</span><br><span class="line">            <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">            <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (v1[i] != v2[i])</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，String类定义两个对象相等的标准是字符串内容都相同，而不是引用是否相等。</p>
+<p>假如我们有一个自定义的Parent类，里面有两个属性，我们自定义两个对象相等的标尺为Parent对象的两个属性都相等，则对象相等，否则不相等。<br>那么我们来仿照上面String对equals的重写，我们来重写一下Parent的equals方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Parent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Parent</span><span class="params">(String name, String age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(String age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 引用相等那么两个对象当然相等</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == obj) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象为空则不相等</span></span><br><span class="line">        <span class="keyword">if</span> (obj == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象不是Parent类的实例则不相等</span></span><br><span class="line">        <span class="keyword">if</span> (!(obj <span class="keyword">instanceof</span> Parent)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Parent otherParent = (Parent) obj;</span><br><span class="line">        <span class="keyword">if</span> (otherParent.getName().equals(<span class="keyword">this</span>.getName()) </span><br><span class="line">            &amp;&amp; otherParent.getAge() == <span class="keyword">this</span>.getAge()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后写一个测试方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Parent p1 = <span class="keyword">new</span> Parent(<span class="string">"Alice"</span>, <span class="string">"20"</span>);</span><br><span class="line">        Parent p2 = <span class="keyword">new</span> Parent(<span class="string">"Tom"</span>, <span class="string">"21"</span>);</span><br><span class="line">        Parent p3 = <span class="keyword">new</span> Parent(<span class="string">"Alice"</span>, <span class="string">"20"</span>);</span><br><span class="line">        System.out.println(p1.equals(p2));</span><br><span class="line">        System.out.println(p1.equals(p3));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到上面的测试main方法输出，第一个是false，第二个是true，我们觉得这个equals实现的好像没什么问题。<br>如果我们有个Son类继承了Parent类，Son类也同样重写了equals方法，Son类如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String idNo;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String score;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Son</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Son</span><span class="params">(String name, String age, String idNo, String score)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name, age);</span><br><span class="line">        <span class="keyword">this</span>.idNo = idNo;</span><br><span class="line">        <span class="keyword">this</span>.score = score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getIdNo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> idNo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIdNo</span><span class="params">(String idNo)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.idNo = idNo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getScore</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setScore</span><span class="params">(String score)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.score = score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 引用相等那么两个对象当然相等</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == obj) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象为空则不相等</span></span><br><span class="line">        <span class="keyword">if</span> (obj == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象不是Son类的实例则不相等</span></span><br><span class="line">        <span class="keyword">if</span> (!(obj <span class="keyword">instanceof</span> Son)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Son otherSon = (Son) obj;</span><br><span class="line">        <span class="keyword">if</span> (otherSon.getIdNo().equals(<span class="keyword">this</span>.getIdNo()) </span><br><span class="line">            &amp;&amp; otherSon.getScore() == <span class="keyword">this</span>.getScore()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这时候我们再来写一个测试方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Parent p = <span class="keyword">new</span> Parent(<span class="string">"Alice"</span>, <span class="string">"20"</span>);</span><br><span class="line">        Son s = <span class="keyword">new</span> Son(<span class="string">"Alice"</span>, <span class="string">"20"</span>, <span class="string">"001"</span>, <span class="string">"95"</span>);</span><br><span class="line">        System.out.println(p.equals(s));</span><br><span class="line">        System.out.println(s.equals(p));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到第一个输出为true，第二个输出竟然是false！这明显违反了我们上面说的equals的几个约定中的对称性。<br>细看一下我们发现，问题出现在 instanceof 关键字上，Son是Parent的子类，所以Son instanceof Parent当然是true，但是Parent instanceof Son就自然是false了。<br>所以，instanceof是做不到对称性的要求的，我们可以使用getClass()方法来代替instanceof运算符，把上面Parent类中使用instanceof的地方改为以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (getClass() != obj.getClass()) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再次运行测试方法，可以看到输出都是false，满足对称性。</p>
+<p>再次运行测试方法，可以看到输出都是false，满足对称性。</p>
+<p>但是我们也要注意，也不是什么时候都要使用getClass，毕竟自定义对象是否相等的标准是由自己定义的。而且使用getClass不符合多态的设计思想。比如一个父类有两个子类,子类中没有自定义相等的概念，也就是说没有重写equals，如果使用getClass实现父类equals方法的重写，那么就不能在两个不同子类的对象进行相等的比较。<br>所以，如果子类能够拥有自己的相等概念，则根据对称性需求，我们需要采用getClass()；如果由父类决定相等的概念，那么就可以使用instanceof，这样可以在不同的子类的对象之间进行相等的比较。</p>
+<p>下面给出重写equals方法的最佳实践： </p>
+<ol>
+<li>参数命名为otherObject，稍后会将它转换成另一个叫做other的变量。 </li>
+<li>用==判断比较的两个对象引用是否相等，如果引用相等那么表示是同一个对象，那么当然相等。 </li>
+<li>如果otherObject为null，直接返回false。 </li>
+<li>比较this和otherObject是否是同一个类：如果equals的语义在每个子类中有所改变，就使用getClass()判断；如果所有的子类都有统一的定义，那么使用instanceof判断。 </li>
+<li>将otherObject转换成对应类的变量。 </li>
+<li>最后对对象的属性进行比较。使用==比较基本类型，使用equals比较对象。如果都相等则返回true，否则返回false。注意如果是在子类中定义equals，则要包含 super.equals(other)。</li>
+</ol>
+<p>那么根据刚才的最佳实践，我们来重新写一下上面的Parent类的equals方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object otherObject)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 用==判断比较的两个对象引用是否相等，如果引用相等那么表示是同一个对象，那么当然相等。</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == otherObject) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果otherObject为null，直接返回false。</span></span><br><span class="line">    <span class="keyword">if</span> (otherObject == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 比较this和otherObject是否是同一个类</span></span><br><span class="line">    <span class="comment">// 以下两种写法二选一</span></span><br><span class="line">    <span class="comment">// 如果equals的语义在每个子类中有所改变，就使用getClass()判断</span></span><br><span class="line">    <span class="keyword">if</span> (getClass() != otherObject.getClass()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果所有的子类都有统一的定义，那么使用instanceof判断</span></span><br><span class="line">    <span class="keyword">if</span> (!(otherObject <span class="keyword">instanceof</span> Parent)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将otherObject转换成对应类的变量。</span></span><br><span class="line">    Parent otherParent = (Parent) otherObject;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最后对对象的属性进行比较。使用==比较基本类型，使用equals比较对象。如果都相等则返回true，否则返回false。</span></span><br><span class="line">    <span class="keyword">if</span> (otherParent.getName().equals(<span class="keyword">this</span>.getName()) </span><br><span class="line">        &amp;&amp; otherParent.getAge() == <span class="keyword">this</span>.getAge()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后再提醒一下不要忘记，API中的最后有一句话，一般来说重写equals方法，就要重写hashCode方法，以便保持hashCode方法的通用约定，即相等的对象必须具有相等的hashcode。</p>
+<h3 id="6、clone"><a href="#6、clone" class="headerlink" title="6、clone()"></a>6、clone()</h3><p>该方法源码如下：<br>protected native Object clone() throws CloneNotSupportedException;</p>
+<p>其实文档讲的还是蛮清楚的，我们再次强调一下，clone()的正确调用是需要实现Cloneable接口，如果没有实现Cloneable接口，子类直接调用Object类的clone()方法，则会抛出CloneNotSupportedException异常。<br>来看一下Cloneable的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现，Cloneable接口仅是一个表示接口，它本身不包含任何方法，用来指示Object.clone()可以合法的被子类所调用。</p>
+<p>使用clone方法的优点是速度快，而且灵活。速度快是因为clone方法最终会调用Object.clone()方法，这是一个native方法，本质是内存块复制，所以在速度上比使用new创建对象要快。灵活是因为可以在运行时动态的获取对象的类型以及状态，从而创建一个对象。</p>
+<p>但是clone创建对象的缺点也很明显：实现深拷贝较为困难，需要整个类继承的所有类以及所有的属性都很好的实现clone方法。另外就是需要处理CloneNotSupportedException异常。</p>
+<p>因此，我们如果想使用clone方法的话，需要非常谨慎。事实上，更建议的不是实现Cloneable接口，而是编写拷贝构造器。</p>
+<h3 id="7、toString"><a href="#7、toString" class="headerlink" title="7、toString()"></a>7、toString()</h3><p>该方法源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> getClass().getName() + <span class="string">"@"</span> + Integer.toHexString(hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印某个对象时，默认是调用toString方法。不过从源码我们可以看到，默认的toString返回的内容可读性并不好，所以通常都要重写toString，输出需要的实例信息，比如某些属性的值。</p>
+<h3 id="8、notify"><a href="#8、notify" class="headerlink" title="8、notify()"></a>8、notify()</h3><p>该方法源码如下：<br>public final native void notify();<br>这个方法是用于多线程操作的，我们先来看一下同样也是用于多线程的另外几个方法。</p>
+<h3 id="9、notifyAll"><a href="#9、notifyAll" class="headerlink" title="9、notifyAll()"></a>9、notifyAll()</h3><p>通过查看API，我们知道这个notifyAll()和刚才的notify()差不多，只是notify()是随机唤醒一个等待的线程，而notifyAll()是唤醒正在等待对象监视器的所有线程。</p>
+<p>该方法源码如下： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="10、wait-long"><a href="#10、wait-long" class="headerlink" title="10、wait(long)"></a>10、wait(long)</h3><p>方法源码如下： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="11、wait-long-int"><a href="#11、wait-long-int" class="headerlink" title="11、wait(long, int)"></a>11、wait(long, int)</h3><p>再来看一下源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                            <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        timeout++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wait(timeout);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="12、wait"><a href="#12、wait" class="headerlink" title="12、wait()"></a>12、wait()</h3><p>源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上这几个方法，notify，notifyAll，wait，都是public final native的，不可以被子类重写，且都是本地方法。这几个方法提供了java线程间等待、挂起等协同机制，是java多线程的基础。这里我们就先大致看一下源码，等后面研究到多线程的时候再来仔细解读它们。</p>
+<h3 id="13、finalize"><a href="#13、finalize" class="headerlink" title="13、finalize()"></a>13、finalize()</h3><p>源码如下： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>​    该方法用于垃圾回收，一般由 JVM 自动调用，一般不需要程序员去手动调用该方法。这里我们就只是先看一下API怎么讲，后面细究 JVM 的时候再详细描述。</p>
+<hr>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

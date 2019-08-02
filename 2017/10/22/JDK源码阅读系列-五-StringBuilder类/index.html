@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="江南E客的Blog">
+    <meta name="keyword" content="腾讯">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JDK源码阅读系列(五)--StringBuilder类 - 江南E客的Blog | Z.Alex&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 你的努力要配的上你的野心 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>Z.Alex</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 你的努力要配的上你的野心 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JDK源码阅读系列(五)--StringBuilder类
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-10-22 12:23:39</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Java" title="Java">Java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#源码阅读" title="源码阅读">源码阅读</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <p>1、概况</p>
+<p>​    在 Java 中处理字符串时经常会使用 String 类，实际上 String 对象的值是一个常量，一旦创建后不能被改变。正是因为其不可变，所以也无法进行修改操作，只有不断地 new 出新的 String 对象。为此 Java 引入了可变字符串变量 StringBuilder 类，它不是线程安全的，只用在单线程场景下。类关系如下：</p>
+<p><img src="/2017/10/22/JDK源码阅读系列-五-StringBuilder类/Study/Blog/Hexo/source/_posts/JDK%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%B3%BB%E5%88%97-%E4%BA%94-StringBuilder%E7%B1%BB/class_sb_1.png" alt="class_sb_1"></p>
+<p>2、继承关系及类定义</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--java.lang.Object</span><br><span class="line">  --java.lang.AbstractStringBuilder</span><br><span class="line">    --java.lang.StringBuilder</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">CharSequence</span></span></span><br></pre></td></tr></table></figure>
+<p>​    StringBuilder 类被声明为 final，说明它不能再被继承。同时它继承了 AbstractStringBuilder 类，并实现了 Serializable 和 CharSequence 两个接口。</p>
+<p>其中 Serializable 接口表明其可以序列化。</p>
+<p>CharSequence 接口用来实现获取字符序列的相关信息，接口定义如下： </p>
+<ul>
+<li>length()获取字符序列长度。 </li>
+<li>charAt(int index)获取某个索引对应字符。 </li>
+<li>subSequence(int start, int end)获取指定范围子字符串。 </li>
+<li>toString()转成字符串对象。 </li>
+<li>chars()用于获取字符序列的字符的 int 类型值的流，该接口提供了默认的实现。 </li>
+<li>codePoints()用于获取字符序列的代码点的 int 类型的值的流，提供了默认的实现。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">length</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">char</span> <span class="title">charAt</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">CharSequence <span class="title">subSequence</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">default</span> IntStream <span class="title">chars</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        省略代码。。</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">default</span> IntStream <span class="title">codePoints</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        省略代码。。</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        
+            <div class="donate-container">
+    <div class="donate-button">
+        <button id="donate-button">赞赏</button>
+    </div>
+    <div class="donate-img-container hide" id="donate-img-container">
+        <img id="donate-img" src="" data-src="/img/donate.png">
+        <p> 感谢鼓励 </p>
+    </div>
+</div>
+        
+        <br />
+        <div id="comment-container" style="display:none;">
+        </div>
+        <div id="disqus_thread" style="display:none;"></div>
+
+        <div id="lv-container" style="display:none;">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://twitter.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-twitter"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/z.alex">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="http://weibo.com/江南E客">
+                            <span class="fa-stack fa-lg">
+                                  <i class="iconfont icon-weibo"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank" href="https://www.facebook.com/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-facebook"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/Alex0605">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://www.linkedin.com/in/z_alex">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-linkedin"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv" style="display:none">
+            <span id="busuanzi_value_site_pv" style="display:none"></span>
+        </span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+            <span id="busuanzi_value_site_uv" style="display:none"></span>
+        </span>
+     </p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
