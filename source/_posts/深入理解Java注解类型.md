@@ -2,7 +2,7 @@
 
 title: 深入理解Java注解类型
 date: 2018-03-02 16:44:06
-tags:[Java]
+tags: [Java]
 ---
 
 ### 1、理解Java注解
