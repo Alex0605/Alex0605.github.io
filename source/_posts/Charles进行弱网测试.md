@@ -51,6 +51,14 @@ tags: [Android]
 
 ![](Charles进行弱网测试/charles_2.png)
 
+**配置参数说明：**
+**bandwidth —— 带宽，即上行、下行数据传输速度**
+**utilisation —— 带宽可用率，大部分modern是100%**
+**round-trip latency —— 第一个请求的时延，单位是ms。**
+**MTU —— 最大传输单元，即TCP包的最大size，可以更真实模拟TCP层，每次传输的分包情况。**
+**Releability —— 指连接的可靠性。这里指的是10kb的可靠率。用于模拟网络不稳定。**
+**Stability —— 连接稳定性，也会影响带宽可用性。用于模拟移动网络，移动网络连接一般不可靠。**
+
 #### 3.3.2、网络参数配置
 
 ![](Charles进行弱网测试/charles_net_params_1.png)
